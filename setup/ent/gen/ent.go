@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
 )
 
@@ -31,7 +32,8 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		individual.Table: individual.ValidColumn,
+		incomebracket.Table: incomebracket.ValidColumn,
+		individual.Table:    individual.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

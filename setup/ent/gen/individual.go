@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
 )
 
@@ -16,7 +17,54 @@ type Individual struct {
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// Age holds the value of the "age" field.
-	Age int `json:"age,omitempty"`
+	Age float64 `json:"age,omitempty"`
+	// Workclass holds the value of the "workclass" field.
+	Workclass int `json:"workclass,omitempty"`
+	// Education holds the value of the "education" field.
+	Education int `json:"education,omitempty"`
+	// MaritalStatus holds the value of the "marital_status" field.
+	MaritalStatus int `json:"marital_status,omitempty"`
+	// Occupation holds the value of the "occupation" field.
+	Occupation int `json:"occupation,omitempty"`
+	// Relationship holds the value of the "relationship" field.
+	Relationship int `json:"relationship,omitempty"`
+	// Race holds the value of the "race" field.
+	Race int `json:"race,omitempty"`
+	// Sex holds the value of the "sex" field.
+	Sex int `json:"sex,omitempty"`
+	// CapitalGain holds the value of the "capital_gain" field.
+	CapitalGain float64 `json:"capital_gain,omitempty"`
+	// CapitalLoss holds the value of the "capital_loss" field.
+	CapitalLoss float64 `json:"capital_loss,omitempty"`
+	// HoursPerWeek holds the value of the "hours_per_week" field.
+	HoursPerWeek float64 `json:"hours_per_week,omitempty"`
+	// Country holds the value of the "country" field.
+	Country int `json:"country,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the IndividualQuery when eager-loading is set.
+	Edges IndividualEdges `json:"edges"`
+}
+
+// IndividualEdges holds the relations/edges for other nodes in the graph.
+type IndividualEdges struct {
+	// Bracket holds the value of the bracket edge.
+	Bracket *IncomeBracket `json:"bracket,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// BracketOrErr returns the Bracket value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IndividualEdges) BracketOrErr() (*IncomeBracket, error) {
+	if e.loadedTypes[0] {
+		if e.Bracket == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: incomebracket.Label}
+		}
+		return e.Bracket, nil
+	}
+	return nil, &NotLoadedError{edge: "bracket"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,7 +72,9 @@ func (*Individual) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case individual.FieldID, individual.FieldAge:
+		case individual.FieldAge, individual.FieldCapitalGain, individual.FieldCapitalLoss, individual.FieldHoursPerWeek:
+			values[i] = new(sql.NullFloat64)
+		case individual.FieldID, individual.FieldWorkclass, individual.FieldEducation, individual.FieldMaritalStatus, individual.FieldOccupation, individual.FieldRelationship, individual.FieldRace, individual.FieldSex, individual.FieldCountry:
 			values[i] = new(sql.NullInt64)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Individual", columns[i])
@@ -48,14 +98,85 @@ func (i *Individual) assignValues(columns []string, values []interface{}) error 
 			}
 			i.ID = int(value.Int64)
 		case individual.FieldAge:
-			if value, ok := values[j].(*sql.NullInt64); !ok {
+			if value, ok := values[j].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[j])
 			} else if value.Valid {
-				i.Age = int(value.Int64)
+				i.Age = value.Float64
+			}
+		case individual.FieldWorkclass:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field workclass", values[j])
+			} else if value.Valid {
+				i.Workclass = int(value.Int64)
+			}
+		case individual.FieldEducation:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field education", values[j])
+			} else if value.Valid {
+				i.Education = int(value.Int64)
+			}
+		case individual.FieldMaritalStatus:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field marital_status", values[j])
+			} else if value.Valid {
+				i.MaritalStatus = int(value.Int64)
+			}
+		case individual.FieldOccupation:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field occupation", values[j])
+			} else if value.Valid {
+				i.Occupation = int(value.Int64)
+			}
+		case individual.FieldRelationship:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field relationship", values[j])
+			} else if value.Valid {
+				i.Relationship = int(value.Int64)
+			}
+		case individual.FieldRace:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field race", values[j])
+			} else if value.Valid {
+				i.Race = int(value.Int64)
+			}
+		case individual.FieldSex:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field sex", values[j])
+			} else if value.Valid {
+				i.Sex = int(value.Int64)
+			}
+		case individual.FieldCapitalGain:
+			if value, ok := values[j].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field capital_gain", values[j])
+			} else if value.Valid {
+				i.CapitalGain = value.Float64
+			}
+		case individual.FieldCapitalLoss:
+			if value, ok := values[j].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field capital_loss", values[j])
+			} else if value.Valid {
+				i.CapitalLoss = value.Float64
+			}
+		case individual.FieldHoursPerWeek:
+			if value, ok := values[j].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field hours_per_week", values[j])
+			} else if value.Valid {
+				i.HoursPerWeek = value.Float64
+			}
+		case individual.FieldCountry:
+			if value, ok := values[j].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field country", values[j])
+			} else if value.Valid {
+				i.Country = int(value.Int64)
 			}
 		}
 	}
 	return nil
+}
+
+// QueryBracket queries the "bracket" edge of the Individual entity.
+func (i *Individual) QueryBracket() *IncomeBracketQuery {
+	return (&IndividualClient{config: i.config}).QueryBracket(i)
 }
 
 // Update returns a builder for updating this Individual.
@@ -83,6 +204,39 @@ func (i *Individual) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", i.ID))
 	builder.WriteString("age=")
 	builder.WriteString(fmt.Sprintf("%v", i.Age))
+	builder.WriteString(", ")
+	builder.WriteString("workclass=")
+	builder.WriteString(fmt.Sprintf("%v", i.Workclass))
+	builder.WriteString(", ")
+	builder.WriteString("education=")
+	builder.WriteString(fmt.Sprintf("%v", i.Education))
+	builder.WriteString(", ")
+	builder.WriteString("marital_status=")
+	builder.WriteString(fmt.Sprintf("%v", i.MaritalStatus))
+	builder.WriteString(", ")
+	builder.WriteString("occupation=")
+	builder.WriteString(fmt.Sprintf("%v", i.Occupation))
+	builder.WriteString(", ")
+	builder.WriteString("relationship=")
+	builder.WriteString(fmt.Sprintf("%v", i.Relationship))
+	builder.WriteString(", ")
+	builder.WriteString("race=")
+	builder.WriteString(fmt.Sprintf("%v", i.Race))
+	builder.WriteString(", ")
+	builder.WriteString("sex=")
+	builder.WriteString(fmt.Sprintf("%v", i.Sex))
+	builder.WriteString(", ")
+	builder.WriteString("capital_gain=")
+	builder.WriteString(fmt.Sprintf("%v", i.CapitalGain))
+	builder.WriteString(", ")
+	builder.WriteString("capital_loss=")
+	builder.WriteString(fmt.Sprintf("%v", i.CapitalLoss))
+	builder.WriteString(", ")
+	builder.WriteString("hours_per_week=")
+	builder.WriteString(fmt.Sprintf("%v", i.HoursPerWeek))
+	builder.WriteString(", ")
+	builder.WriteString("country=")
+	builder.WriteString(fmt.Sprintf("%v", i.Country))
 	builder.WriteByte(')')
 	return builder.String()
 }

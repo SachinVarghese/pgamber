@@ -6,5 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// IncomeBracket is the predicate function for incomebracket builders.
+type IncomeBracket func(*sql.Selector)
+
 // Individual is the predicate function for individual builders.
 type Individual func(*sql.Selector)

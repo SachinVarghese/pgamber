@@ -10,10 +10,12 @@ import (
 
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/migrate"
 
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // Client is the client that holds all ent builders.
@@ -21,6 +23,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// IncomeBracket is the client for interacting with the IncomeBracket builders.
+	IncomeBracket *IncomeBracketClient
 	// Individual is the client for interacting with the Individual builders.
 	Individual *IndividualClient
 }
@@ -36,6 +40,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.IncomeBracket = NewIncomeBracketClient(c.config)
 	c.Individual = NewIndividualClient(c.config)
 }
 
@@ -68,9 +73,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:        ctx,
-		config:     cfg,
-		Individual: NewIndividualClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		IncomeBracket: NewIncomeBracketClient(cfg),
+		Individual:    NewIndividualClient(cfg),
 	}, nil
 }
 
@@ -88,16 +94,17 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:        ctx,
-		config:     cfg,
-		Individual: NewIndividualClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		IncomeBracket: NewIncomeBracketClient(cfg),
+		Individual:    NewIndividualClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Individual.
+//		IncomeBracket.
 //		Query().
 //		Count(ctx)
 //
@@ -120,7 +127,114 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.IncomeBracket.Use(hooks...)
 	c.Individual.Use(hooks...)
+}
+
+// IncomeBracketClient is a client for the IncomeBracket schema.
+type IncomeBracketClient struct {
+	config
+}
+
+// NewIncomeBracketClient returns a client for the IncomeBracket from the given config.
+func NewIncomeBracketClient(c config) *IncomeBracketClient {
+	return &IncomeBracketClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `incomebracket.Hooks(f(g(h())))`.
+func (c *IncomeBracketClient) Use(hooks ...Hook) {
+	c.hooks.IncomeBracket = append(c.hooks.IncomeBracket, hooks...)
+}
+
+// Create returns a builder for creating a IncomeBracket entity.
+func (c *IncomeBracketClient) Create() *IncomeBracketCreate {
+	mutation := newIncomeBracketMutation(c.config, OpCreate)
+	return &IncomeBracketCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of IncomeBracket entities.
+func (c *IncomeBracketClient) CreateBulk(builders ...*IncomeBracketCreate) *IncomeBracketCreateBulk {
+	return &IncomeBracketCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for IncomeBracket.
+func (c *IncomeBracketClient) Update() *IncomeBracketUpdate {
+	mutation := newIncomeBracketMutation(c.config, OpUpdate)
+	return &IncomeBracketUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *IncomeBracketClient) UpdateOne(ib *IncomeBracket) *IncomeBracketUpdateOne {
+	mutation := newIncomeBracketMutation(c.config, OpUpdateOne, withIncomeBracket(ib))
+	return &IncomeBracketUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *IncomeBracketClient) UpdateOneID(id int) *IncomeBracketUpdateOne {
+	mutation := newIncomeBracketMutation(c.config, OpUpdateOne, withIncomeBracketID(id))
+	return &IncomeBracketUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for IncomeBracket.
+func (c *IncomeBracketClient) Delete() *IncomeBracketDelete {
+	mutation := newIncomeBracketMutation(c.config, OpDelete)
+	return &IncomeBracketDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *IncomeBracketClient) DeleteOne(ib *IncomeBracket) *IncomeBracketDeleteOne {
+	return c.DeleteOneID(ib.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *IncomeBracketClient) DeleteOneID(id int) *IncomeBracketDeleteOne {
+	builder := c.Delete().Where(incomebracket.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &IncomeBracketDeleteOne{builder}
+}
+
+// Query returns a query builder for IncomeBracket.
+func (c *IncomeBracketClient) Query() *IncomeBracketQuery {
+	return &IncomeBracketQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a IncomeBracket entity by its id.
+func (c *IncomeBracketClient) Get(ctx context.Context, id int) (*IncomeBracket, error) {
+	return c.Query().Where(incomebracket.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *IncomeBracketClient) GetX(ctx context.Context, id int) *IncomeBracket {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPerson queries the person edge of a IncomeBracket.
+func (c *IncomeBracketClient) QueryPerson(ib *IncomeBracket) *IndividualQuery {
+	query := &IndividualQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := ib.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(incomebracket.Table, incomebracket.FieldID, id),
+			sqlgraph.To(individual.Table, individual.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, incomebracket.PersonTable, incomebracket.PersonColumn),
+		)
+		fromV = sqlgraph.Neighbors(ib.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *IncomeBracketClient) Hooks() []Hook {
+	return c.hooks.IncomeBracket
 }
 
 // IndividualClient is a client for the Individual schema.
@@ -206,6 +320,22 @@ func (c *IndividualClient) GetX(ctx context.Context, id int) *Individual {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryBracket queries the bracket edge of a Individual.
+func (c *IndividualClient) QueryBracket(i *Individual) *IncomeBracketQuery {
+	query := &IncomeBracketQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(individual.Table, individual.FieldID, id),
+			sqlgraph.To(incomebracket.Table, incomebracket.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, individual.BracketTable, individual.BracketColumn),
+		)
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

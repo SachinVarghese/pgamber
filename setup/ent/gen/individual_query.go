@@ -4,12 +4,14 @@ package gen
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/predicate"
 )
@@ -17,12 +19,13 @@ import (
 // IndividualQuery is the builder for querying Individual entities.
 type IndividualQuery struct {
 	config
-	limit      *int
-	offset     *int
-	unique     *bool
-	order      []OrderFunc
-	fields     []string
-	predicates []predicate.Individual
+	limit       *int
+	offset      *int
+	unique      *bool
+	order       []OrderFunc
+	fields      []string
+	predicates  []predicate.Individual
+	withBracket *IncomeBracketQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +60,28 @@ func (iq *IndividualQuery) Unique(unique bool) *IndividualQuery {
 func (iq *IndividualQuery) Order(o ...OrderFunc) *IndividualQuery {
 	iq.order = append(iq.order, o...)
 	return iq
+}
+
+// QueryBracket chains the current query on the "bracket" edge.
+func (iq *IndividualQuery) QueryBracket() *IncomeBracketQuery {
+	query := &IncomeBracketQuery{config: iq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := iq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := iq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(individual.Table, individual.FieldID, selector),
+			sqlgraph.To(incomebracket.Table, incomebracket.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, individual.BracketTable, individual.BracketColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Individual entity from the query.
@@ -235,16 +260,28 @@ func (iq *IndividualQuery) Clone() *IndividualQuery {
 		return nil
 	}
 	return &IndividualQuery{
-		config:     iq.config,
-		limit:      iq.limit,
-		offset:     iq.offset,
-		order:      append([]OrderFunc{}, iq.order...),
-		predicates: append([]predicate.Individual{}, iq.predicates...),
+		config:      iq.config,
+		limit:       iq.limit,
+		offset:      iq.offset,
+		order:       append([]OrderFunc{}, iq.order...),
+		predicates:  append([]predicate.Individual{}, iq.predicates...),
+		withBracket: iq.withBracket.Clone(),
 		// clone intermediate query.
 		sql:    iq.sql.Clone(),
 		path:   iq.path,
 		unique: iq.unique,
 	}
+}
+
+// WithBracket tells the query-builder to eager-load the nodes that are connected to
+// the "bracket" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *IndividualQuery) WithBracket(opts ...func(*IncomeBracketQuery)) *IndividualQuery {
+	query := &IncomeBracketQuery{config: iq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	iq.withBracket = query
+	return iq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -253,7 +290,7 @@ func (iq *IndividualQuery) Clone() *IndividualQuery {
 // Example:
 //
 //	var v []struct {
-//		Age int `json:"age,omitempty"`
+//		Age float64 `json:"age,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -282,7 +319,7 @@ func (iq *IndividualQuery) GroupBy(field string, fields ...string) *IndividualGr
 // Example:
 //
 //	var v []struct {
-//		Age int `json:"age,omitempty"`
+//		Age float64 `json:"age,omitempty"`
 //	}
 //
 //	client.Individual.Query().
@@ -315,8 +352,11 @@ func (iq *IndividualQuery) prepareQuery(ctx context.Context) error {
 
 func (iq *IndividualQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Individual, error) {
 	var (
-		nodes = []*Individual{}
-		_spec = iq.querySpec()
+		nodes       = []*Individual{}
+		_spec       = iq.querySpec()
+		loadedTypes = [1]bool{
+			iq.withBracket != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
 		return (*Individual).scanValues(nil, columns)
@@ -324,6 +364,7 @@ func (iq *IndividualQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*I
 	_spec.Assign = func(columns []string, values []interface{}) error {
 		node := &Individual{config: iq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -335,7 +376,42 @@ func (iq *IndividualQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*I
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := iq.withBracket; query != nil {
+		if err := iq.loadBracket(ctx, query, nodes, nil,
+			func(n *Individual, e *IncomeBracket) { n.Edges.Bracket = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (iq *IndividualQuery) loadBracket(ctx context.Context, query *IncomeBracketQuery, nodes []*Individual, init func(*Individual), assign func(*Individual, *IncomeBracket)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Individual)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	query.withFKs = true
+	query.Where(predicate.IncomeBracket(func(s *sql.Selector) {
+		s.Where(sql.InValues(individual.BracketColumn, fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.individual_bracket
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "individual_bracket" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "individual_bracket" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (iq *IndividualQuery) sqlCount(ctx context.Context) (int, error) {

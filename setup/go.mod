@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	entgo.io/ent v0.11.2
-	github.com/mattn/go-sqlite3 v1.14.13
+	github.com/lib/pq v1.10.5
 )
 
 require (

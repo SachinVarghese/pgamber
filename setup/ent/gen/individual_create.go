@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
 )
 
@@ -20,9 +21,94 @@ type IndividualCreate struct {
 }
 
 // SetAge sets the "age" field.
-func (ic *IndividualCreate) SetAge(i int) *IndividualCreate {
-	ic.mutation.SetAge(i)
+func (ic *IndividualCreate) SetAge(f float64) *IndividualCreate {
+	ic.mutation.SetAge(f)
 	return ic
+}
+
+// SetWorkclass sets the "workclass" field.
+func (ic *IndividualCreate) SetWorkclass(i int) *IndividualCreate {
+	ic.mutation.SetWorkclass(i)
+	return ic
+}
+
+// SetEducation sets the "education" field.
+func (ic *IndividualCreate) SetEducation(i int) *IndividualCreate {
+	ic.mutation.SetEducation(i)
+	return ic
+}
+
+// SetMaritalStatus sets the "marital_status" field.
+func (ic *IndividualCreate) SetMaritalStatus(i int) *IndividualCreate {
+	ic.mutation.SetMaritalStatus(i)
+	return ic
+}
+
+// SetOccupation sets the "occupation" field.
+func (ic *IndividualCreate) SetOccupation(i int) *IndividualCreate {
+	ic.mutation.SetOccupation(i)
+	return ic
+}
+
+// SetRelationship sets the "relationship" field.
+func (ic *IndividualCreate) SetRelationship(i int) *IndividualCreate {
+	ic.mutation.SetRelationship(i)
+	return ic
+}
+
+// SetRace sets the "race" field.
+func (ic *IndividualCreate) SetRace(i int) *IndividualCreate {
+	ic.mutation.SetRace(i)
+	return ic
+}
+
+// SetSex sets the "sex" field.
+func (ic *IndividualCreate) SetSex(i int) *IndividualCreate {
+	ic.mutation.SetSex(i)
+	return ic
+}
+
+// SetCapitalGain sets the "capital_gain" field.
+func (ic *IndividualCreate) SetCapitalGain(f float64) *IndividualCreate {
+	ic.mutation.SetCapitalGain(f)
+	return ic
+}
+
+// SetCapitalLoss sets the "capital_loss" field.
+func (ic *IndividualCreate) SetCapitalLoss(f float64) *IndividualCreate {
+	ic.mutation.SetCapitalLoss(f)
+	return ic
+}
+
+// SetHoursPerWeek sets the "hours_per_week" field.
+func (ic *IndividualCreate) SetHoursPerWeek(f float64) *IndividualCreate {
+	ic.mutation.SetHoursPerWeek(f)
+	return ic
+}
+
+// SetCountry sets the "country" field.
+func (ic *IndividualCreate) SetCountry(i int) *IndividualCreate {
+	ic.mutation.SetCountry(i)
+	return ic
+}
+
+// SetBracketID sets the "bracket" edge to the IncomeBracket entity by ID.
+func (ic *IndividualCreate) SetBracketID(id int) *IndividualCreate {
+	ic.mutation.SetBracketID(id)
+	return ic
+}
+
+// SetNillableBracketID sets the "bracket" edge to the IncomeBracket entity by ID if the given value is not nil.
+func (ic *IndividualCreate) SetNillableBracketID(id *int) *IndividualCreate {
+	if id != nil {
+		ic = ic.SetBracketID(*id)
+	}
+	return ic
+}
+
+// SetBracket sets the "bracket" edge to the IncomeBracket entity.
+func (ic *IndividualCreate) SetBracket(i *IncomeBracket) *IndividualCreate {
+	return ic.SetBracketID(i.ID)
 }
 
 // Mutation returns the IndividualMutation object of the builder.
@@ -109,6 +195,79 @@ func (ic *IndividualCreate) check() error {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`gen: validator failed for field "Individual.age": %w`, err)}
 		}
 	}
+	if _, ok := ic.mutation.Workclass(); !ok {
+		return &ValidationError{Name: "workclass", err: errors.New(`gen: missing required field "Individual.workclass"`)}
+	}
+	if v, ok := ic.mutation.Workclass(); ok {
+		if err := individual.WorkclassValidator(v); err != nil {
+			return &ValidationError{Name: "workclass", err: fmt.Errorf(`gen: validator failed for field "Individual.workclass": %w`, err)}
+		}
+	}
+	if _, ok := ic.mutation.Education(); !ok {
+		return &ValidationError{Name: "education", err: errors.New(`gen: missing required field "Individual.education"`)}
+	}
+	if v, ok := ic.mutation.Education(); ok {
+		if err := individual.EducationValidator(v); err != nil {
+			return &ValidationError{Name: "education", err: fmt.Errorf(`gen: validator failed for field "Individual.education": %w`, err)}
+		}
+	}
+	if _, ok := ic.mutation.MaritalStatus(); !ok {
+		return &ValidationError{Name: "marital_status", err: errors.New(`gen: missing required field "Individual.marital_status"`)}
+	}
+	if v, ok := ic.mutation.MaritalStatus(); ok {
+		if err := individual.MaritalStatusValidator(v); err != nil {
+			return &ValidationError{Name: "marital_status", err: fmt.Errorf(`gen: validator failed for field "Individual.marital_status": %w`, err)}
+		}
+	}
+	if _, ok := ic.mutation.Occupation(); !ok {
+		return &ValidationError{Name: "occupation", err: errors.New(`gen: missing required field "Individual.occupation"`)}
+	}
+	if v, ok := ic.mutation.Occupation(); ok {
+		if err := individual.OccupationValidator(v); err != nil {
+			return &ValidationError{Name: "occupation", err: fmt.Errorf(`gen: validator failed for field "Individual.occupation": %w`, err)}
+		}
+	}
+	if _, ok := ic.mutation.Relationship(); !ok {
+		return &ValidationError{Name: "relationship", err: errors.New(`gen: missing required field "Individual.relationship"`)}
+	}
+	if v, ok := ic.mutation.Relationship(); ok {
+		if err := individual.RelationshipValidator(v); err != nil {
+			return &ValidationError{Name: "relationship", err: fmt.Errorf(`gen: validator failed for field "Individual.relationship": %w`, err)}
+		}
+	}
+	if _, ok := ic.mutation.Race(); !ok {
+		return &ValidationError{Name: "race", err: errors.New(`gen: missing required field "Individual.race"`)}
+	}
+	if v, ok := ic.mutation.Race(); ok {
+		if err := individual.RaceValidator(v); err != nil {
+			return &ValidationError{Name: "race", err: fmt.Errorf(`gen: validator failed for field "Individual.race": %w`, err)}
+		}
+	}
+	if _, ok := ic.mutation.Sex(); !ok {
+		return &ValidationError{Name: "sex", err: errors.New(`gen: missing required field "Individual.sex"`)}
+	}
+	if v, ok := ic.mutation.Sex(); ok {
+		if err := individual.SexValidator(v); err != nil {
+			return &ValidationError{Name: "sex", err: fmt.Errorf(`gen: validator failed for field "Individual.sex": %w`, err)}
+		}
+	}
+	if _, ok := ic.mutation.CapitalGain(); !ok {
+		return &ValidationError{Name: "capital_gain", err: errors.New(`gen: missing required field "Individual.capital_gain"`)}
+	}
+	if _, ok := ic.mutation.CapitalLoss(); !ok {
+		return &ValidationError{Name: "capital_loss", err: errors.New(`gen: missing required field "Individual.capital_loss"`)}
+	}
+	if _, ok := ic.mutation.HoursPerWeek(); !ok {
+		return &ValidationError{Name: "hours_per_week", err: errors.New(`gen: missing required field "Individual.hours_per_week"`)}
+	}
+	if _, ok := ic.mutation.Country(); !ok {
+		return &ValidationError{Name: "country", err: errors.New(`gen: missing required field "Individual.country"`)}
+	}
+	if v, ok := ic.mutation.Country(); ok {
+		if err := individual.CountryValidator(v); err != nil {
+			return &ValidationError{Name: "country", err: fmt.Errorf(`gen: validator failed for field "Individual.country": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -138,11 +297,118 @@ func (ic *IndividualCreate) createSpec() (*Individual, *sqlgraph.CreateSpec) {
 	)
 	if value, ok := ic.mutation.Age(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeFloat64,
 			Value:  value,
 			Column: individual.FieldAge,
 		})
 		_node.Age = value
+	}
+	if value, ok := ic.mutation.Workclass(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldWorkclass,
+		})
+		_node.Workclass = value
+	}
+	if value, ok := ic.mutation.Education(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldEducation,
+		})
+		_node.Education = value
+	}
+	if value, ok := ic.mutation.MaritalStatus(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldMaritalStatus,
+		})
+		_node.MaritalStatus = value
+	}
+	if value, ok := ic.mutation.Occupation(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldOccupation,
+		})
+		_node.Occupation = value
+	}
+	if value, ok := ic.mutation.Relationship(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRelationship,
+		})
+		_node.Relationship = value
+	}
+	if value, ok := ic.mutation.Race(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRace,
+		})
+		_node.Race = value
+	}
+	if value, ok := ic.mutation.Sex(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldSex,
+		})
+		_node.Sex = value
+	}
+	if value, ok := ic.mutation.CapitalGain(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalGain,
+		})
+		_node.CapitalGain = value
+	}
+	if value, ok := ic.mutation.CapitalLoss(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalLoss,
+		})
+		_node.CapitalLoss = value
+	}
+	if value, ok := ic.mutation.HoursPerWeek(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldHoursPerWeek,
+		})
+		_node.HoursPerWeek = value
+	}
+	if value, ok := ic.mutation.Country(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldCountry,
+		})
+		_node.Country = value
+	}
+	if nodes := ic.mutation.BracketIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   individual.BracketTable,
+			Columns: []string{individual.BracketColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: incomebracket.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

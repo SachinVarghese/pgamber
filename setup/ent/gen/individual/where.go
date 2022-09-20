@@ -4,6 +4,7 @@ package individual
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/predicate"
 )
 
@@ -79,28 +80,105 @@ func IDLTE(id int) predicate.Individual {
 }
 
 // Age applies equality check predicate on the "age" field. It's identical to AgeEQ.
-func Age(v int) predicate.Individual {
+func Age(v float64) predicate.Individual {
 	return predicate.Individual(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAge), v))
 	})
 }
 
+// Workclass applies equality check predicate on the "workclass" field. It's identical to WorkclassEQ.
+func Workclass(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldWorkclass), v))
+	})
+}
+
+// Education applies equality check predicate on the "education" field. It's identical to EducationEQ.
+func Education(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldEducation), v))
+	})
+}
+
+// MaritalStatus applies equality check predicate on the "marital_status" field. It's identical to MaritalStatusEQ.
+func MaritalStatus(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldMaritalStatus), v))
+	})
+}
+
+// Occupation applies equality check predicate on the "occupation" field. It's identical to OccupationEQ.
+func Occupation(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldOccupation), v))
+	})
+}
+
+// Relationship applies equality check predicate on the "relationship" field. It's identical to RelationshipEQ.
+func Relationship(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRelationship), v))
+	})
+}
+
+// Race applies equality check predicate on the "race" field. It's identical to RaceEQ.
+func Race(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRace), v))
+	})
+}
+
+// Sex applies equality check predicate on the "sex" field. It's identical to SexEQ.
+func Sex(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSex), v))
+	})
+}
+
+// CapitalGain applies equality check predicate on the "capital_gain" field. It's identical to CapitalGainEQ.
+func CapitalGain(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCapitalGain), v))
+	})
+}
+
+// CapitalLoss applies equality check predicate on the "capital_loss" field. It's identical to CapitalLossEQ.
+func CapitalLoss(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCapitalLoss), v))
+	})
+}
+
+// HoursPerWeek applies equality check predicate on the "hours_per_week" field. It's identical to HoursPerWeekEQ.
+func HoursPerWeek(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHoursPerWeek), v))
+	})
+}
+
+// Country applies equality check predicate on the "country" field. It's identical to CountryEQ.
+func Country(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCountry), v))
+	})
+}
+
 // AgeEQ applies the EQ predicate on the "age" field.
-func AgeEQ(v int) predicate.Individual {
+func AgeEQ(v float64) predicate.Individual {
 	return predicate.Individual(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAge), v))
 	})
 }
 
 // AgeNEQ applies the NEQ predicate on the "age" field.
-func AgeNEQ(v int) predicate.Individual {
+func AgeNEQ(v float64) predicate.Individual {
 	return predicate.Individual(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldAge), v))
 	})
 }
 
 // AgeIn applies the In predicate on the "age" field.
-func AgeIn(vs ...int) predicate.Individual {
+func AgeIn(vs ...float64) predicate.Individual {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -111,7 +189,7 @@ func AgeIn(vs ...int) predicate.Individual {
 }
 
 // AgeNotIn applies the NotIn predicate on the "age" field.
-func AgeNotIn(vs ...int) predicate.Individual {
+func AgeNotIn(vs ...float64) predicate.Individual {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -122,30 +200,762 @@ func AgeNotIn(vs ...int) predicate.Individual {
 }
 
 // AgeGT applies the GT predicate on the "age" field.
-func AgeGT(v int) predicate.Individual {
+func AgeGT(v float64) predicate.Individual {
 	return predicate.Individual(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldAge), v))
 	})
 }
 
 // AgeGTE applies the GTE predicate on the "age" field.
-func AgeGTE(v int) predicate.Individual {
+func AgeGTE(v float64) predicate.Individual {
 	return predicate.Individual(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldAge), v))
 	})
 }
 
 // AgeLT applies the LT predicate on the "age" field.
-func AgeLT(v int) predicate.Individual {
+func AgeLT(v float64) predicate.Individual {
 	return predicate.Individual(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldAge), v))
 	})
 }
 
 // AgeLTE applies the LTE predicate on the "age" field.
-func AgeLTE(v int) predicate.Individual {
+func AgeLTE(v float64) predicate.Individual {
 	return predicate.Individual(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldAge), v))
+	})
+}
+
+// WorkclassEQ applies the EQ predicate on the "workclass" field.
+func WorkclassEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldWorkclass), v))
+	})
+}
+
+// WorkclassNEQ applies the NEQ predicate on the "workclass" field.
+func WorkclassNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldWorkclass), v))
+	})
+}
+
+// WorkclassIn applies the In predicate on the "workclass" field.
+func WorkclassIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldWorkclass), v...))
+	})
+}
+
+// WorkclassNotIn applies the NotIn predicate on the "workclass" field.
+func WorkclassNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldWorkclass), v...))
+	})
+}
+
+// WorkclassGT applies the GT predicate on the "workclass" field.
+func WorkclassGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldWorkclass), v))
+	})
+}
+
+// WorkclassGTE applies the GTE predicate on the "workclass" field.
+func WorkclassGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldWorkclass), v))
+	})
+}
+
+// WorkclassLT applies the LT predicate on the "workclass" field.
+func WorkclassLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldWorkclass), v))
+	})
+}
+
+// WorkclassLTE applies the LTE predicate on the "workclass" field.
+func WorkclassLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldWorkclass), v))
+	})
+}
+
+// EducationEQ applies the EQ predicate on the "education" field.
+func EducationEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldEducation), v))
+	})
+}
+
+// EducationNEQ applies the NEQ predicate on the "education" field.
+func EducationNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldEducation), v))
+	})
+}
+
+// EducationIn applies the In predicate on the "education" field.
+func EducationIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldEducation), v...))
+	})
+}
+
+// EducationNotIn applies the NotIn predicate on the "education" field.
+func EducationNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldEducation), v...))
+	})
+}
+
+// EducationGT applies the GT predicate on the "education" field.
+func EducationGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldEducation), v))
+	})
+}
+
+// EducationGTE applies the GTE predicate on the "education" field.
+func EducationGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldEducation), v))
+	})
+}
+
+// EducationLT applies the LT predicate on the "education" field.
+func EducationLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldEducation), v))
+	})
+}
+
+// EducationLTE applies the LTE predicate on the "education" field.
+func EducationLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldEducation), v))
+	})
+}
+
+// MaritalStatusEQ applies the EQ predicate on the "marital_status" field.
+func MaritalStatusEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldMaritalStatus), v))
+	})
+}
+
+// MaritalStatusNEQ applies the NEQ predicate on the "marital_status" field.
+func MaritalStatusNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldMaritalStatus), v))
+	})
+}
+
+// MaritalStatusIn applies the In predicate on the "marital_status" field.
+func MaritalStatusIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldMaritalStatus), v...))
+	})
+}
+
+// MaritalStatusNotIn applies the NotIn predicate on the "marital_status" field.
+func MaritalStatusNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldMaritalStatus), v...))
+	})
+}
+
+// MaritalStatusGT applies the GT predicate on the "marital_status" field.
+func MaritalStatusGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldMaritalStatus), v))
+	})
+}
+
+// MaritalStatusGTE applies the GTE predicate on the "marital_status" field.
+func MaritalStatusGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldMaritalStatus), v))
+	})
+}
+
+// MaritalStatusLT applies the LT predicate on the "marital_status" field.
+func MaritalStatusLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldMaritalStatus), v))
+	})
+}
+
+// MaritalStatusLTE applies the LTE predicate on the "marital_status" field.
+func MaritalStatusLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldMaritalStatus), v))
+	})
+}
+
+// OccupationEQ applies the EQ predicate on the "occupation" field.
+func OccupationEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldOccupation), v))
+	})
+}
+
+// OccupationNEQ applies the NEQ predicate on the "occupation" field.
+func OccupationNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldOccupation), v))
+	})
+}
+
+// OccupationIn applies the In predicate on the "occupation" field.
+func OccupationIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldOccupation), v...))
+	})
+}
+
+// OccupationNotIn applies the NotIn predicate on the "occupation" field.
+func OccupationNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldOccupation), v...))
+	})
+}
+
+// OccupationGT applies the GT predicate on the "occupation" field.
+func OccupationGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldOccupation), v))
+	})
+}
+
+// OccupationGTE applies the GTE predicate on the "occupation" field.
+func OccupationGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldOccupation), v))
+	})
+}
+
+// OccupationLT applies the LT predicate on the "occupation" field.
+func OccupationLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldOccupation), v))
+	})
+}
+
+// OccupationLTE applies the LTE predicate on the "occupation" field.
+func OccupationLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldOccupation), v))
+	})
+}
+
+// RelationshipEQ applies the EQ predicate on the "relationship" field.
+func RelationshipEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRelationship), v))
+	})
+}
+
+// RelationshipNEQ applies the NEQ predicate on the "relationship" field.
+func RelationshipNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldRelationship), v))
+	})
+}
+
+// RelationshipIn applies the In predicate on the "relationship" field.
+func RelationshipIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldRelationship), v...))
+	})
+}
+
+// RelationshipNotIn applies the NotIn predicate on the "relationship" field.
+func RelationshipNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldRelationship), v...))
+	})
+}
+
+// RelationshipGT applies the GT predicate on the "relationship" field.
+func RelationshipGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldRelationship), v))
+	})
+}
+
+// RelationshipGTE applies the GTE predicate on the "relationship" field.
+func RelationshipGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldRelationship), v))
+	})
+}
+
+// RelationshipLT applies the LT predicate on the "relationship" field.
+func RelationshipLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldRelationship), v))
+	})
+}
+
+// RelationshipLTE applies the LTE predicate on the "relationship" field.
+func RelationshipLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldRelationship), v))
+	})
+}
+
+// RaceEQ applies the EQ predicate on the "race" field.
+func RaceEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRace), v))
+	})
+}
+
+// RaceNEQ applies the NEQ predicate on the "race" field.
+func RaceNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldRace), v))
+	})
+}
+
+// RaceIn applies the In predicate on the "race" field.
+func RaceIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldRace), v...))
+	})
+}
+
+// RaceNotIn applies the NotIn predicate on the "race" field.
+func RaceNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldRace), v...))
+	})
+}
+
+// RaceGT applies the GT predicate on the "race" field.
+func RaceGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldRace), v))
+	})
+}
+
+// RaceGTE applies the GTE predicate on the "race" field.
+func RaceGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldRace), v))
+	})
+}
+
+// RaceLT applies the LT predicate on the "race" field.
+func RaceLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldRace), v))
+	})
+}
+
+// RaceLTE applies the LTE predicate on the "race" field.
+func RaceLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldRace), v))
+	})
+}
+
+// SexEQ applies the EQ predicate on the "sex" field.
+func SexEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSex), v))
+	})
+}
+
+// SexNEQ applies the NEQ predicate on the "sex" field.
+func SexNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSex), v))
+	})
+}
+
+// SexIn applies the In predicate on the "sex" field.
+func SexIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldSex), v...))
+	})
+}
+
+// SexNotIn applies the NotIn predicate on the "sex" field.
+func SexNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldSex), v...))
+	})
+}
+
+// SexGT applies the GT predicate on the "sex" field.
+func SexGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSex), v))
+	})
+}
+
+// SexGTE applies the GTE predicate on the "sex" field.
+func SexGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSex), v))
+	})
+}
+
+// SexLT applies the LT predicate on the "sex" field.
+func SexLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSex), v))
+	})
+}
+
+// SexLTE applies the LTE predicate on the "sex" field.
+func SexLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSex), v))
+	})
+}
+
+// CapitalGainEQ applies the EQ predicate on the "capital_gain" field.
+func CapitalGainEQ(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCapitalGain), v))
+	})
+}
+
+// CapitalGainNEQ applies the NEQ predicate on the "capital_gain" field.
+func CapitalGainNEQ(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCapitalGain), v))
+	})
+}
+
+// CapitalGainIn applies the In predicate on the "capital_gain" field.
+func CapitalGainIn(vs ...float64) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCapitalGain), v...))
+	})
+}
+
+// CapitalGainNotIn applies the NotIn predicate on the "capital_gain" field.
+func CapitalGainNotIn(vs ...float64) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCapitalGain), v...))
+	})
+}
+
+// CapitalGainGT applies the GT predicate on the "capital_gain" field.
+func CapitalGainGT(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCapitalGain), v))
+	})
+}
+
+// CapitalGainGTE applies the GTE predicate on the "capital_gain" field.
+func CapitalGainGTE(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCapitalGain), v))
+	})
+}
+
+// CapitalGainLT applies the LT predicate on the "capital_gain" field.
+func CapitalGainLT(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCapitalGain), v))
+	})
+}
+
+// CapitalGainLTE applies the LTE predicate on the "capital_gain" field.
+func CapitalGainLTE(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCapitalGain), v))
+	})
+}
+
+// CapitalLossEQ applies the EQ predicate on the "capital_loss" field.
+func CapitalLossEQ(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCapitalLoss), v))
+	})
+}
+
+// CapitalLossNEQ applies the NEQ predicate on the "capital_loss" field.
+func CapitalLossNEQ(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCapitalLoss), v))
+	})
+}
+
+// CapitalLossIn applies the In predicate on the "capital_loss" field.
+func CapitalLossIn(vs ...float64) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCapitalLoss), v...))
+	})
+}
+
+// CapitalLossNotIn applies the NotIn predicate on the "capital_loss" field.
+func CapitalLossNotIn(vs ...float64) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCapitalLoss), v...))
+	})
+}
+
+// CapitalLossGT applies the GT predicate on the "capital_loss" field.
+func CapitalLossGT(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCapitalLoss), v))
+	})
+}
+
+// CapitalLossGTE applies the GTE predicate on the "capital_loss" field.
+func CapitalLossGTE(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCapitalLoss), v))
+	})
+}
+
+// CapitalLossLT applies the LT predicate on the "capital_loss" field.
+func CapitalLossLT(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCapitalLoss), v))
+	})
+}
+
+// CapitalLossLTE applies the LTE predicate on the "capital_loss" field.
+func CapitalLossLTE(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCapitalLoss), v))
+	})
+}
+
+// HoursPerWeekEQ applies the EQ predicate on the "hours_per_week" field.
+func HoursPerWeekEQ(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHoursPerWeek), v))
+	})
+}
+
+// HoursPerWeekNEQ applies the NEQ predicate on the "hours_per_week" field.
+func HoursPerWeekNEQ(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldHoursPerWeek), v))
+	})
+}
+
+// HoursPerWeekIn applies the In predicate on the "hours_per_week" field.
+func HoursPerWeekIn(vs ...float64) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldHoursPerWeek), v...))
+	})
+}
+
+// HoursPerWeekNotIn applies the NotIn predicate on the "hours_per_week" field.
+func HoursPerWeekNotIn(vs ...float64) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldHoursPerWeek), v...))
+	})
+}
+
+// HoursPerWeekGT applies the GT predicate on the "hours_per_week" field.
+func HoursPerWeekGT(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldHoursPerWeek), v))
+	})
+}
+
+// HoursPerWeekGTE applies the GTE predicate on the "hours_per_week" field.
+func HoursPerWeekGTE(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldHoursPerWeek), v))
+	})
+}
+
+// HoursPerWeekLT applies the LT predicate on the "hours_per_week" field.
+func HoursPerWeekLT(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldHoursPerWeek), v))
+	})
+}
+
+// HoursPerWeekLTE applies the LTE predicate on the "hours_per_week" field.
+func HoursPerWeekLTE(v float64) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldHoursPerWeek), v))
+	})
+}
+
+// CountryEQ applies the EQ predicate on the "country" field.
+func CountryEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCountry), v))
+	})
+}
+
+// CountryNEQ applies the NEQ predicate on the "country" field.
+func CountryNEQ(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCountry), v))
+	})
+}
+
+// CountryIn applies the In predicate on the "country" field.
+func CountryIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCountry), v...))
+	})
+}
+
+// CountryNotIn applies the NotIn predicate on the "country" field.
+func CountryNotIn(vs ...int) predicate.Individual {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCountry), v...))
+	})
+}
+
+// CountryGT applies the GT predicate on the "country" field.
+func CountryGT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCountry), v))
+	})
+}
+
+// CountryGTE applies the GTE predicate on the "country" field.
+func CountryGTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCountry), v))
+	})
+}
+
+// CountryLT applies the LT predicate on the "country" field.
+func CountryLT(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCountry), v))
+	})
+}
+
+// CountryLTE applies the LTE predicate on the "country" field.
+func CountryLTE(v int) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCountry), v))
+	})
+}
+
+// HasBracket applies the HasEdge predicate on the "bracket" edge.
+func HasBracket() predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(BracketTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, BracketTable, BracketColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBracketWith applies the HasEdge predicate on the "bracket" edge with a given conditions (other predicates).
+func HasBracketWith(preds ...predicate.IncomeBracket) predicate.Individual {
+	return predicate.Individual(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(BracketInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, BracketTable, BracketColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
 	})
 }
 

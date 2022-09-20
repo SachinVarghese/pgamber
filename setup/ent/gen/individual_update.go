@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/predicate"
 )
@@ -28,21 +29,189 @@ func (iu *IndividualUpdate) Where(ps ...predicate.Individual) *IndividualUpdate 
 }
 
 // SetAge sets the "age" field.
-func (iu *IndividualUpdate) SetAge(i int) *IndividualUpdate {
+func (iu *IndividualUpdate) SetAge(f float64) *IndividualUpdate {
 	iu.mutation.ResetAge()
-	iu.mutation.SetAge(i)
+	iu.mutation.SetAge(f)
 	return iu
 }
 
-// AddAge adds i to the "age" field.
-func (iu *IndividualUpdate) AddAge(i int) *IndividualUpdate {
-	iu.mutation.AddAge(i)
+// AddAge adds f to the "age" field.
+func (iu *IndividualUpdate) AddAge(f float64) *IndividualUpdate {
+	iu.mutation.AddAge(f)
 	return iu
+}
+
+// SetWorkclass sets the "workclass" field.
+func (iu *IndividualUpdate) SetWorkclass(i int) *IndividualUpdate {
+	iu.mutation.ResetWorkclass()
+	iu.mutation.SetWorkclass(i)
+	return iu
+}
+
+// AddWorkclass adds i to the "workclass" field.
+func (iu *IndividualUpdate) AddWorkclass(i int) *IndividualUpdate {
+	iu.mutation.AddWorkclass(i)
+	return iu
+}
+
+// SetEducation sets the "education" field.
+func (iu *IndividualUpdate) SetEducation(i int) *IndividualUpdate {
+	iu.mutation.ResetEducation()
+	iu.mutation.SetEducation(i)
+	return iu
+}
+
+// AddEducation adds i to the "education" field.
+func (iu *IndividualUpdate) AddEducation(i int) *IndividualUpdate {
+	iu.mutation.AddEducation(i)
+	return iu
+}
+
+// SetMaritalStatus sets the "marital_status" field.
+func (iu *IndividualUpdate) SetMaritalStatus(i int) *IndividualUpdate {
+	iu.mutation.ResetMaritalStatus()
+	iu.mutation.SetMaritalStatus(i)
+	return iu
+}
+
+// AddMaritalStatus adds i to the "marital_status" field.
+func (iu *IndividualUpdate) AddMaritalStatus(i int) *IndividualUpdate {
+	iu.mutation.AddMaritalStatus(i)
+	return iu
+}
+
+// SetOccupation sets the "occupation" field.
+func (iu *IndividualUpdate) SetOccupation(i int) *IndividualUpdate {
+	iu.mutation.ResetOccupation()
+	iu.mutation.SetOccupation(i)
+	return iu
+}
+
+// AddOccupation adds i to the "occupation" field.
+func (iu *IndividualUpdate) AddOccupation(i int) *IndividualUpdate {
+	iu.mutation.AddOccupation(i)
+	return iu
+}
+
+// SetRelationship sets the "relationship" field.
+func (iu *IndividualUpdate) SetRelationship(i int) *IndividualUpdate {
+	iu.mutation.ResetRelationship()
+	iu.mutation.SetRelationship(i)
+	return iu
+}
+
+// AddRelationship adds i to the "relationship" field.
+func (iu *IndividualUpdate) AddRelationship(i int) *IndividualUpdate {
+	iu.mutation.AddRelationship(i)
+	return iu
+}
+
+// SetRace sets the "race" field.
+func (iu *IndividualUpdate) SetRace(i int) *IndividualUpdate {
+	iu.mutation.ResetRace()
+	iu.mutation.SetRace(i)
+	return iu
+}
+
+// AddRace adds i to the "race" field.
+func (iu *IndividualUpdate) AddRace(i int) *IndividualUpdate {
+	iu.mutation.AddRace(i)
+	return iu
+}
+
+// SetSex sets the "sex" field.
+func (iu *IndividualUpdate) SetSex(i int) *IndividualUpdate {
+	iu.mutation.ResetSex()
+	iu.mutation.SetSex(i)
+	return iu
+}
+
+// AddSex adds i to the "sex" field.
+func (iu *IndividualUpdate) AddSex(i int) *IndividualUpdate {
+	iu.mutation.AddSex(i)
+	return iu
+}
+
+// SetCapitalGain sets the "capital_gain" field.
+func (iu *IndividualUpdate) SetCapitalGain(f float64) *IndividualUpdate {
+	iu.mutation.ResetCapitalGain()
+	iu.mutation.SetCapitalGain(f)
+	return iu
+}
+
+// AddCapitalGain adds f to the "capital_gain" field.
+func (iu *IndividualUpdate) AddCapitalGain(f float64) *IndividualUpdate {
+	iu.mutation.AddCapitalGain(f)
+	return iu
+}
+
+// SetCapitalLoss sets the "capital_loss" field.
+func (iu *IndividualUpdate) SetCapitalLoss(f float64) *IndividualUpdate {
+	iu.mutation.ResetCapitalLoss()
+	iu.mutation.SetCapitalLoss(f)
+	return iu
+}
+
+// AddCapitalLoss adds f to the "capital_loss" field.
+func (iu *IndividualUpdate) AddCapitalLoss(f float64) *IndividualUpdate {
+	iu.mutation.AddCapitalLoss(f)
+	return iu
+}
+
+// SetHoursPerWeek sets the "hours_per_week" field.
+func (iu *IndividualUpdate) SetHoursPerWeek(f float64) *IndividualUpdate {
+	iu.mutation.ResetHoursPerWeek()
+	iu.mutation.SetHoursPerWeek(f)
+	return iu
+}
+
+// AddHoursPerWeek adds f to the "hours_per_week" field.
+func (iu *IndividualUpdate) AddHoursPerWeek(f float64) *IndividualUpdate {
+	iu.mutation.AddHoursPerWeek(f)
+	return iu
+}
+
+// SetCountry sets the "country" field.
+func (iu *IndividualUpdate) SetCountry(i int) *IndividualUpdate {
+	iu.mutation.ResetCountry()
+	iu.mutation.SetCountry(i)
+	return iu
+}
+
+// AddCountry adds i to the "country" field.
+func (iu *IndividualUpdate) AddCountry(i int) *IndividualUpdate {
+	iu.mutation.AddCountry(i)
+	return iu
+}
+
+// SetBracketID sets the "bracket" edge to the IncomeBracket entity by ID.
+func (iu *IndividualUpdate) SetBracketID(id int) *IndividualUpdate {
+	iu.mutation.SetBracketID(id)
+	return iu
+}
+
+// SetNillableBracketID sets the "bracket" edge to the IncomeBracket entity by ID if the given value is not nil.
+func (iu *IndividualUpdate) SetNillableBracketID(id *int) *IndividualUpdate {
+	if id != nil {
+		iu = iu.SetBracketID(*id)
+	}
+	return iu
+}
+
+// SetBracket sets the "bracket" edge to the IncomeBracket entity.
+func (iu *IndividualUpdate) SetBracket(i *IncomeBracket) *IndividualUpdate {
+	return iu.SetBracketID(i.ID)
 }
 
 // Mutation returns the IndividualMutation object of the builder.
 func (iu *IndividualUpdate) Mutation() *IndividualMutation {
 	return iu.mutation
+}
+
+// ClearBracket clears the "bracket" edge to the IncomeBracket entity.
+func (iu *IndividualUpdate) ClearBracket() *IndividualUpdate {
+	iu.mutation.ClearBracket()
+	return iu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -112,6 +281,46 @@ func (iu *IndividualUpdate) check() error {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`gen: validator failed for field "Individual.age": %w`, err)}
 		}
 	}
+	if v, ok := iu.mutation.Workclass(); ok {
+		if err := individual.WorkclassValidator(v); err != nil {
+			return &ValidationError{Name: "workclass", err: fmt.Errorf(`gen: validator failed for field "Individual.workclass": %w`, err)}
+		}
+	}
+	if v, ok := iu.mutation.Education(); ok {
+		if err := individual.EducationValidator(v); err != nil {
+			return &ValidationError{Name: "education", err: fmt.Errorf(`gen: validator failed for field "Individual.education": %w`, err)}
+		}
+	}
+	if v, ok := iu.mutation.MaritalStatus(); ok {
+		if err := individual.MaritalStatusValidator(v); err != nil {
+			return &ValidationError{Name: "marital_status", err: fmt.Errorf(`gen: validator failed for field "Individual.marital_status": %w`, err)}
+		}
+	}
+	if v, ok := iu.mutation.Occupation(); ok {
+		if err := individual.OccupationValidator(v); err != nil {
+			return &ValidationError{Name: "occupation", err: fmt.Errorf(`gen: validator failed for field "Individual.occupation": %w`, err)}
+		}
+	}
+	if v, ok := iu.mutation.Relationship(); ok {
+		if err := individual.RelationshipValidator(v); err != nil {
+			return &ValidationError{Name: "relationship", err: fmt.Errorf(`gen: validator failed for field "Individual.relationship": %w`, err)}
+		}
+	}
+	if v, ok := iu.mutation.Race(); ok {
+		if err := individual.RaceValidator(v); err != nil {
+			return &ValidationError{Name: "race", err: fmt.Errorf(`gen: validator failed for field "Individual.race": %w`, err)}
+		}
+	}
+	if v, ok := iu.mutation.Sex(); ok {
+		if err := individual.SexValidator(v); err != nil {
+			return &ValidationError{Name: "sex", err: fmt.Errorf(`gen: validator failed for field "Individual.sex": %w`, err)}
+		}
+	}
+	if v, ok := iu.mutation.Country(); ok {
+		if err := individual.CountryValidator(v); err != nil {
+			return &ValidationError{Name: "country", err: fmt.Errorf(`gen: validator failed for field "Individual.country": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -135,17 +344,206 @@ func (iu *IndividualUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := iu.mutation.Age(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeFloat64,
 			Value:  value,
 			Column: individual.FieldAge,
 		})
 	}
 	if value, ok := iu.mutation.AddedAge(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeFloat64,
 			Value:  value,
 			Column: individual.FieldAge,
 		})
+	}
+	if value, ok := iu.mutation.Workclass(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldWorkclass,
+		})
+	}
+	if value, ok := iu.mutation.AddedWorkclass(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldWorkclass,
+		})
+	}
+	if value, ok := iu.mutation.Education(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldEducation,
+		})
+	}
+	if value, ok := iu.mutation.AddedEducation(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldEducation,
+		})
+	}
+	if value, ok := iu.mutation.MaritalStatus(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldMaritalStatus,
+		})
+	}
+	if value, ok := iu.mutation.AddedMaritalStatus(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldMaritalStatus,
+		})
+	}
+	if value, ok := iu.mutation.Occupation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldOccupation,
+		})
+	}
+	if value, ok := iu.mutation.AddedOccupation(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldOccupation,
+		})
+	}
+	if value, ok := iu.mutation.Relationship(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRelationship,
+		})
+	}
+	if value, ok := iu.mutation.AddedRelationship(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRelationship,
+		})
+	}
+	if value, ok := iu.mutation.Race(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRace,
+		})
+	}
+	if value, ok := iu.mutation.AddedRace(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRace,
+		})
+	}
+	if value, ok := iu.mutation.Sex(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldSex,
+		})
+	}
+	if value, ok := iu.mutation.AddedSex(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldSex,
+		})
+	}
+	if value, ok := iu.mutation.CapitalGain(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalGain,
+		})
+	}
+	if value, ok := iu.mutation.AddedCapitalGain(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalGain,
+		})
+	}
+	if value, ok := iu.mutation.CapitalLoss(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalLoss,
+		})
+	}
+	if value, ok := iu.mutation.AddedCapitalLoss(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalLoss,
+		})
+	}
+	if value, ok := iu.mutation.HoursPerWeek(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldHoursPerWeek,
+		})
+	}
+	if value, ok := iu.mutation.AddedHoursPerWeek(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldHoursPerWeek,
+		})
+	}
+	if value, ok := iu.mutation.Country(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldCountry,
+		})
+	}
+	if value, ok := iu.mutation.AddedCountry(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldCountry,
+		})
+	}
+	if iu.mutation.BracketCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   individual.BracketTable,
+			Columns: []string{individual.BracketColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: incomebracket.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.BracketIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   individual.BracketTable,
+			Columns: []string{individual.BracketColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: incomebracket.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -167,21 +565,189 @@ type IndividualUpdateOne struct {
 }
 
 // SetAge sets the "age" field.
-func (iuo *IndividualUpdateOne) SetAge(i int) *IndividualUpdateOne {
+func (iuo *IndividualUpdateOne) SetAge(f float64) *IndividualUpdateOne {
 	iuo.mutation.ResetAge()
-	iuo.mutation.SetAge(i)
+	iuo.mutation.SetAge(f)
 	return iuo
 }
 
-// AddAge adds i to the "age" field.
-func (iuo *IndividualUpdateOne) AddAge(i int) *IndividualUpdateOne {
-	iuo.mutation.AddAge(i)
+// AddAge adds f to the "age" field.
+func (iuo *IndividualUpdateOne) AddAge(f float64) *IndividualUpdateOne {
+	iuo.mutation.AddAge(f)
 	return iuo
+}
+
+// SetWorkclass sets the "workclass" field.
+func (iuo *IndividualUpdateOne) SetWorkclass(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetWorkclass()
+	iuo.mutation.SetWorkclass(i)
+	return iuo
+}
+
+// AddWorkclass adds i to the "workclass" field.
+func (iuo *IndividualUpdateOne) AddWorkclass(i int) *IndividualUpdateOne {
+	iuo.mutation.AddWorkclass(i)
+	return iuo
+}
+
+// SetEducation sets the "education" field.
+func (iuo *IndividualUpdateOne) SetEducation(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetEducation()
+	iuo.mutation.SetEducation(i)
+	return iuo
+}
+
+// AddEducation adds i to the "education" field.
+func (iuo *IndividualUpdateOne) AddEducation(i int) *IndividualUpdateOne {
+	iuo.mutation.AddEducation(i)
+	return iuo
+}
+
+// SetMaritalStatus sets the "marital_status" field.
+func (iuo *IndividualUpdateOne) SetMaritalStatus(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetMaritalStatus()
+	iuo.mutation.SetMaritalStatus(i)
+	return iuo
+}
+
+// AddMaritalStatus adds i to the "marital_status" field.
+func (iuo *IndividualUpdateOne) AddMaritalStatus(i int) *IndividualUpdateOne {
+	iuo.mutation.AddMaritalStatus(i)
+	return iuo
+}
+
+// SetOccupation sets the "occupation" field.
+func (iuo *IndividualUpdateOne) SetOccupation(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetOccupation()
+	iuo.mutation.SetOccupation(i)
+	return iuo
+}
+
+// AddOccupation adds i to the "occupation" field.
+func (iuo *IndividualUpdateOne) AddOccupation(i int) *IndividualUpdateOne {
+	iuo.mutation.AddOccupation(i)
+	return iuo
+}
+
+// SetRelationship sets the "relationship" field.
+func (iuo *IndividualUpdateOne) SetRelationship(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetRelationship()
+	iuo.mutation.SetRelationship(i)
+	return iuo
+}
+
+// AddRelationship adds i to the "relationship" field.
+func (iuo *IndividualUpdateOne) AddRelationship(i int) *IndividualUpdateOne {
+	iuo.mutation.AddRelationship(i)
+	return iuo
+}
+
+// SetRace sets the "race" field.
+func (iuo *IndividualUpdateOne) SetRace(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetRace()
+	iuo.mutation.SetRace(i)
+	return iuo
+}
+
+// AddRace adds i to the "race" field.
+func (iuo *IndividualUpdateOne) AddRace(i int) *IndividualUpdateOne {
+	iuo.mutation.AddRace(i)
+	return iuo
+}
+
+// SetSex sets the "sex" field.
+func (iuo *IndividualUpdateOne) SetSex(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetSex()
+	iuo.mutation.SetSex(i)
+	return iuo
+}
+
+// AddSex adds i to the "sex" field.
+func (iuo *IndividualUpdateOne) AddSex(i int) *IndividualUpdateOne {
+	iuo.mutation.AddSex(i)
+	return iuo
+}
+
+// SetCapitalGain sets the "capital_gain" field.
+func (iuo *IndividualUpdateOne) SetCapitalGain(f float64) *IndividualUpdateOne {
+	iuo.mutation.ResetCapitalGain()
+	iuo.mutation.SetCapitalGain(f)
+	return iuo
+}
+
+// AddCapitalGain adds f to the "capital_gain" field.
+func (iuo *IndividualUpdateOne) AddCapitalGain(f float64) *IndividualUpdateOne {
+	iuo.mutation.AddCapitalGain(f)
+	return iuo
+}
+
+// SetCapitalLoss sets the "capital_loss" field.
+func (iuo *IndividualUpdateOne) SetCapitalLoss(f float64) *IndividualUpdateOne {
+	iuo.mutation.ResetCapitalLoss()
+	iuo.mutation.SetCapitalLoss(f)
+	return iuo
+}
+
+// AddCapitalLoss adds f to the "capital_loss" field.
+func (iuo *IndividualUpdateOne) AddCapitalLoss(f float64) *IndividualUpdateOne {
+	iuo.mutation.AddCapitalLoss(f)
+	return iuo
+}
+
+// SetHoursPerWeek sets the "hours_per_week" field.
+func (iuo *IndividualUpdateOne) SetHoursPerWeek(f float64) *IndividualUpdateOne {
+	iuo.mutation.ResetHoursPerWeek()
+	iuo.mutation.SetHoursPerWeek(f)
+	return iuo
+}
+
+// AddHoursPerWeek adds f to the "hours_per_week" field.
+func (iuo *IndividualUpdateOne) AddHoursPerWeek(f float64) *IndividualUpdateOne {
+	iuo.mutation.AddHoursPerWeek(f)
+	return iuo
+}
+
+// SetCountry sets the "country" field.
+func (iuo *IndividualUpdateOne) SetCountry(i int) *IndividualUpdateOne {
+	iuo.mutation.ResetCountry()
+	iuo.mutation.SetCountry(i)
+	return iuo
+}
+
+// AddCountry adds i to the "country" field.
+func (iuo *IndividualUpdateOne) AddCountry(i int) *IndividualUpdateOne {
+	iuo.mutation.AddCountry(i)
+	return iuo
+}
+
+// SetBracketID sets the "bracket" edge to the IncomeBracket entity by ID.
+func (iuo *IndividualUpdateOne) SetBracketID(id int) *IndividualUpdateOne {
+	iuo.mutation.SetBracketID(id)
+	return iuo
+}
+
+// SetNillableBracketID sets the "bracket" edge to the IncomeBracket entity by ID if the given value is not nil.
+func (iuo *IndividualUpdateOne) SetNillableBracketID(id *int) *IndividualUpdateOne {
+	if id != nil {
+		iuo = iuo.SetBracketID(*id)
+	}
+	return iuo
+}
+
+// SetBracket sets the "bracket" edge to the IncomeBracket entity.
+func (iuo *IndividualUpdateOne) SetBracket(i *IncomeBracket) *IndividualUpdateOne {
+	return iuo.SetBracketID(i.ID)
 }
 
 // Mutation returns the IndividualMutation object of the builder.
 func (iuo *IndividualUpdateOne) Mutation() *IndividualMutation {
 	return iuo.mutation
+}
+
+// ClearBracket clears the "bracket" edge to the IncomeBracket entity.
+func (iuo *IndividualUpdateOne) ClearBracket() *IndividualUpdateOne {
+	iuo.mutation.ClearBracket()
+	return iuo
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -264,6 +830,46 @@ func (iuo *IndividualUpdateOne) check() error {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`gen: validator failed for field "Individual.age": %w`, err)}
 		}
 	}
+	if v, ok := iuo.mutation.Workclass(); ok {
+		if err := individual.WorkclassValidator(v); err != nil {
+			return &ValidationError{Name: "workclass", err: fmt.Errorf(`gen: validator failed for field "Individual.workclass": %w`, err)}
+		}
+	}
+	if v, ok := iuo.mutation.Education(); ok {
+		if err := individual.EducationValidator(v); err != nil {
+			return &ValidationError{Name: "education", err: fmt.Errorf(`gen: validator failed for field "Individual.education": %w`, err)}
+		}
+	}
+	if v, ok := iuo.mutation.MaritalStatus(); ok {
+		if err := individual.MaritalStatusValidator(v); err != nil {
+			return &ValidationError{Name: "marital_status", err: fmt.Errorf(`gen: validator failed for field "Individual.marital_status": %w`, err)}
+		}
+	}
+	if v, ok := iuo.mutation.Occupation(); ok {
+		if err := individual.OccupationValidator(v); err != nil {
+			return &ValidationError{Name: "occupation", err: fmt.Errorf(`gen: validator failed for field "Individual.occupation": %w`, err)}
+		}
+	}
+	if v, ok := iuo.mutation.Relationship(); ok {
+		if err := individual.RelationshipValidator(v); err != nil {
+			return &ValidationError{Name: "relationship", err: fmt.Errorf(`gen: validator failed for field "Individual.relationship": %w`, err)}
+		}
+	}
+	if v, ok := iuo.mutation.Race(); ok {
+		if err := individual.RaceValidator(v); err != nil {
+			return &ValidationError{Name: "race", err: fmt.Errorf(`gen: validator failed for field "Individual.race": %w`, err)}
+		}
+	}
+	if v, ok := iuo.mutation.Sex(); ok {
+		if err := individual.SexValidator(v); err != nil {
+			return &ValidationError{Name: "sex", err: fmt.Errorf(`gen: validator failed for field "Individual.sex": %w`, err)}
+		}
+	}
+	if v, ok := iuo.mutation.Country(); ok {
+		if err := individual.CountryValidator(v); err != nil {
+			return &ValidationError{Name: "country", err: fmt.Errorf(`gen: validator failed for field "Individual.country": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -304,17 +910,206 @@ func (iuo *IndividualUpdateOne) sqlSave(ctx context.Context) (_node *Individual,
 	}
 	if value, ok := iuo.mutation.Age(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeFloat64,
 			Value:  value,
 			Column: individual.FieldAge,
 		})
 	}
 	if value, ok := iuo.mutation.AddedAge(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeFloat64,
 			Value:  value,
 			Column: individual.FieldAge,
 		})
+	}
+	if value, ok := iuo.mutation.Workclass(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldWorkclass,
+		})
+	}
+	if value, ok := iuo.mutation.AddedWorkclass(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldWorkclass,
+		})
+	}
+	if value, ok := iuo.mutation.Education(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldEducation,
+		})
+	}
+	if value, ok := iuo.mutation.AddedEducation(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldEducation,
+		})
+	}
+	if value, ok := iuo.mutation.MaritalStatus(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldMaritalStatus,
+		})
+	}
+	if value, ok := iuo.mutation.AddedMaritalStatus(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldMaritalStatus,
+		})
+	}
+	if value, ok := iuo.mutation.Occupation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldOccupation,
+		})
+	}
+	if value, ok := iuo.mutation.AddedOccupation(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldOccupation,
+		})
+	}
+	if value, ok := iuo.mutation.Relationship(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRelationship,
+		})
+	}
+	if value, ok := iuo.mutation.AddedRelationship(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRelationship,
+		})
+	}
+	if value, ok := iuo.mutation.Race(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRace,
+		})
+	}
+	if value, ok := iuo.mutation.AddedRace(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldRace,
+		})
+	}
+	if value, ok := iuo.mutation.Sex(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldSex,
+		})
+	}
+	if value, ok := iuo.mutation.AddedSex(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldSex,
+		})
+	}
+	if value, ok := iuo.mutation.CapitalGain(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalGain,
+		})
+	}
+	if value, ok := iuo.mutation.AddedCapitalGain(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalGain,
+		})
+	}
+	if value, ok := iuo.mutation.CapitalLoss(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalLoss,
+		})
+	}
+	if value, ok := iuo.mutation.AddedCapitalLoss(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldCapitalLoss,
+		})
+	}
+	if value, ok := iuo.mutation.HoursPerWeek(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldHoursPerWeek,
+		})
+	}
+	if value, ok := iuo.mutation.AddedHoursPerWeek(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: individual.FieldHoursPerWeek,
+		})
+	}
+	if value, ok := iuo.mutation.Country(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldCountry,
+		})
+	}
+	if value, ok := iuo.mutation.AddedCountry(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: individual.FieldCountry,
+		})
+	}
+	if iuo.mutation.BracketCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   individual.BracketTable,
+			Columns: []string{individual.BracketColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: incomebracket.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.BracketIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   individual.BracketTable,
+			Columns: []string{individual.BracketColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: incomebracket.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Individual{config: iuo.config}
 	_spec.Assign = _node.assignValues

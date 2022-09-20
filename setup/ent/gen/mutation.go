@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/predicate"
 
@@ -23,21 +24,426 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeIndividual = "Individual"
+	TypeIncomeBracket = "IncomeBracket"
+	TypeIndividual    = "Individual"
 )
 
-// IndividualMutation represents an operation that mutates the Individual nodes in the graph.
-type IndividualMutation struct {
+// IncomeBracketMutation represents an operation that mutates the IncomeBracket nodes in the graph.
+type IncomeBracketMutation struct {
 	config
 	op            Op
 	typ           string
 	id            *int
-	age           *int
-	addage        *int
+	class         *incomebracket.Class
 	clearedFields map[string]struct{}
+	person        *int
+	clearedperson bool
 	done          bool
-	oldValue      func(context.Context) (*Individual, error)
-	predicates    []predicate.Individual
+	oldValue      func(context.Context) (*IncomeBracket, error)
+	predicates    []predicate.IncomeBracket
+}
+
+var _ ent.Mutation = (*IncomeBracketMutation)(nil)
+
+// incomebracketOption allows management of the mutation configuration using functional options.
+type incomebracketOption func(*IncomeBracketMutation)
+
+// newIncomeBracketMutation creates new mutation for the IncomeBracket entity.
+func newIncomeBracketMutation(c config, op Op, opts ...incomebracketOption) *IncomeBracketMutation {
+	m := &IncomeBracketMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeIncomeBracket,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withIncomeBracketID sets the ID field of the mutation.
+func withIncomeBracketID(id int) incomebracketOption {
+	return func(m *IncomeBracketMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *IncomeBracket
+		)
+		m.oldValue = func(ctx context.Context) (*IncomeBracket, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().IncomeBracket.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withIncomeBracket sets the old IncomeBracket of the mutation.
+func withIncomeBracket(node *IncomeBracket) incomebracketOption {
+	return func(m *IncomeBracketMutation) {
+		m.oldValue = func(context.Context) (*IncomeBracket, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m IncomeBracketMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m IncomeBracketMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("gen: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *IncomeBracketMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *IncomeBracketMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().IncomeBracket.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetClass sets the "class" field.
+func (m *IncomeBracketMutation) SetClass(i incomebracket.Class) {
+	m.class = &i
+}
+
+// Class returns the value of the "class" field in the mutation.
+func (m *IncomeBracketMutation) Class() (r incomebracket.Class, exists bool) {
+	v := m.class
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldClass returns the old "class" field's value of the IncomeBracket entity.
+// If the IncomeBracket object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IncomeBracketMutation) OldClass(ctx context.Context) (v incomebracket.Class, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldClass is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldClass requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldClass: %w", err)
+	}
+	return oldValue.Class, nil
+}
+
+// ResetClass resets all changes to the "class" field.
+func (m *IncomeBracketMutation) ResetClass() {
+	m.class = nil
+}
+
+// SetPersonID sets the "person" edge to the Individual entity by id.
+func (m *IncomeBracketMutation) SetPersonID(id int) {
+	m.person = &id
+}
+
+// ClearPerson clears the "person" edge to the Individual entity.
+func (m *IncomeBracketMutation) ClearPerson() {
+	m.clearedperson = true
+}
+
+// PersonCleared reports if the "person" edge to the Individual entity was cleared.
+func (m *IncomeBracketMutation) PersonCleared() bool {
+	return m.clearedperson
+}
+
+// PersonID returns the "person" edge ID in the mutation.
+func (m *IncomeBracketMutation) PersonID() (id int, exists bool) {
+	if m.person != nil {
+		return *m.person, true
+	}
+	return
+}
+
+// PersonIDs returns the "person" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PersonID instead. It exists only for internal usage by the builders.
+func (m *IncomeBracketMutation) PersonIDs() (ids []int) {
+	if id := m.person; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPerson resets all changes to the "person" edge.
+func (m *IncomeBracketMutation) ResetPerson() {
+	m.person = nil
+	m.clearedperson = false
+}
+
+// Where appends a list predicates to the IncomeBracketMutation builder.
+func (m *IncomeBracketMutation) Where(ps ...predicate.IncomeBracket) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *IncomeBracketMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (IncomeBracket).
+func (m *IncomeBracketMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *IncomeBracketMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.class != nil {
+		fields = append(fields, incomebracket.FieldClass)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *IncomeBracketMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case incomebracket.FieldClass:
+		return m.Class()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *IncomeBracketMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case incomebracket.FieldClass:
+		return m.OldClass(ctx)
+	}
+	return nil, fmt.Errorf("unknown IncomeBracket field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IncomeBracketMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case incomebracket.FieldClass:
+		v, ok := value.(incomebracket.Class)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetClass(v)
+		return nil
+	}
+	return fmt.Errorf("unknown IncomeBracket field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *IncomeBracketMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *IncomeBracketMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IncomeBracketMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown IncomeBracket numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *IncomeBracketMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *IncomeBracketMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *IncomeBracketMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown IncomeBracket nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *IncomeBracketMutation) ResetField(name string) error {
+	switch name {
+	case incomebracket.FieldClass:
+		m.ResetClass()
+		return nil
+	}
+	return fmt.Errorf("unknown IncomeBracket field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *IncomeBracketMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.person != nil {
+		edges = append(edges, incomebracket.EdgePerson)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *IncomeBracketMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case incomebracket.EdgePerson:
+		if id := m.person; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *IncomeBracketMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *IncomeBracketMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *IncomeBracketMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedperson {
+		edges = append(edges, incomebracket.EdgePerson)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *IncomeBracketMutation) EdgeCleared(name string) bool {
+	switch name {
+	case incomebracket.EdgePerson:
+		return m.clearedperson
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *IncomeBracketMutation) ClearEdge(name string) error {
+	switch name {
+	case incomebracket.EdgePerson:
+		m.ClearPerson()
+		return nil
+	}
+	return fmt.Errorf("unknown IncomeBracket unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *IncomeBracketMutation) ResetEdge(name string) error {
+	switch name {
+	case incomebracket.EdgePerson:
+		m.ResetPerson()
+		return nil
+	}
+	return fmt.Errorf("unknown IncomeBracket edge %s", name)
+}
+
+// IndividualMutation represents an operation that mutates the Individual nodes in the graph.
+type IndividualMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *int
+	age               *float64
+	addage            *float64
+	workclass         *int
+	addworkclass      *int
+	education         *int
+	addeducation      *int
+	marital_status    *int
+	addmarital_status *int
+	occupation        *int
+	addoccupation     *int
+	relationship      *int
+	addrelationship   *int
+	race              *int
+	addrace           *int
+	sex               *int
+	addsex            *int
+	capital_gain      *float64
+	addcapital_gain   *float64
+	capital_loss      *float64
+	addcapital_loss   *float64
+	hours_per_week    *float64
+	addhours_per_week *float64
+	country           *int
+	addcountry        *int
+	clearedFields     map[string]struct{}
+	bracket           *int
+	clearedbracket    bool
+	done              bool
+	oldValue          func(context.Context) (*Individual, error)
+	predicates        []predicate.Individual
 }
 
 var _ ent.Mutation = (*IndividualMutation)(nil)
@@ -139,13 +545,13 @@ func (m *IndividualMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetAge sets the "age" field.
-func (m *IndividualMutation) SetAge(i int) {
-	m.age = &i
+func (m *IndividualMutation) SetAge(f float64) {
+	m.age = &f
 	m.addage = nil
 }
 
 // Age returns the value of the "age" field in the mutation.
-func (m *IndividualMutation) Age() (r int, exists bool) {
+func (m *IndividualMutation) Age() (r float64, exists bool) {
 	v := m.age
 	if v == nil {
 		return
@@ -156,7 +562,7 @@ func (m *IndividualMutation) Age() (r int, exists bool) {
 // OldAge returns the old "age" field's value of the Individual entity.
 // If the Individual object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *IndividualMutation) OldAge(ctx context.Context) (v int, err error) {
+func (m *IndividualMutation) OldAge(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldAge is only allowed on UpdateOne operations")
 	}
@@ -170,17 +576,17 @@ func (m *IndividualMutation) OldAge(ctx context.Context) (v int, err error) {
 	return oldValue.Age, nil
 }
 
-// AddAge adds i to the "age" field.
-func (m *IndividualMutation) AddAge(i int) {
+// AddAge adds f to the "age" field.
+func (m *IndividualMutation) AddAge(f float64) {
 	if m.addage != nil {
-		*m.addage += i
+		*m.addage += f
 	} else {
-		m.addage = &i
+		m.addage = &f
 	}
 }
 
 // AddedAge returns the value that was added to the "age" field in this mutation.
-func (m *IndividualMutation) AddedAge() (r int, exists bool) {
+func (m *IndividualMutation) AddedAge() (r float64, exists bool) {
 	v := m.addage
 	if v == nil {
 		return
@@ -192,6 +598,661 @@ func (m *IndividualMutation) AddedAge() (r int, exists bool) {
 func (m *IndividualMutation) ResetAge() {
 	m.age = nil
 	m.addage = nil
+}
+
+// SetWorkclass sets the "workclass" field.
+func (m *IndividualMutation) SetWorkclass(i int) {
+	m.workclass = &i
+	m.addworkclass = nil
+}
+
+// Workclass returns the value of the "workclass" field in the mutation.
+func (m *IndividualMutation) Workclass() (r int, exists bool) {
+	v := m.workclass
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWorkclass returns the old "workclass" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldWorkclass(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWorkclass is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWorkclass requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWorkclass: %w", err)
+	}
+	return oldValue.Workclass, nil
+}
+
+// AddWorkclass adds i to the "workclass" field.
+func (m *IndividualMutation) AddWorkclass(i int) {
+	if m.addworkclass != nil {
+		*m.addworkclass += i
+	} else {
+		m.addworkclass = &i
+	}
+}
+
+// AddedWorkclass returns the value that was added to the "workclass" field in this mutation.
+func (m *IndividualMutation) AddedWorkclass() (r int, exists bool) {
+	v := m.addworkclass
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetWorkclass resets all changes to the "workclass" field.
+func (m *IndividualMutation) ResetWorkclass() {
+	m.workclass = nil
+	m.addworkclass = nil
+}
+
+// SetEducation sets the "education" field.
+func (m *IndividualMutation) SetEducation(i int) {
+	m.education = &i
+	m.addeducation = nil
+}
+
+// Education returns the value of the "education" field in the mutation.
+func (m *IndividualMutation) Education() (r int, exists bool) {
+	v := m.education
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEducation returns the old "education" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldEducation(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEducation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEducation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEducation: %w", err)
+	}
+	return oldValue.Education, nil
+}
+
+// AddEducation adds i to the "education" field.
+func (m *IndividualMutation) AddEducation(i int) {
+	if m.addeducation != nil {
+		*m.addeducation += i
+	} else {
+		m.addeducation = &i
+	}
+}
+
+// AddedEducation returns the value that was added to the "education" field in this mutation.
+func (m *IndividualMutation) AddedEducation() (r int, exists bool) {
+	v := m.addeducation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetEducation resets all changes to the "education" field.
+func (m *IndividualMutation) ResetEducation() {
+	m.education = nil
+	m.addeducation = nil
+}
+
+// SetMaritalStatus sets the "marital_status" field.
+func (m *IndividualMutation) SetMaritalStatus(i int) {
+	m.marital_status = &i
+	m.addmarital_status = nil
+}
+
+// MaritalStatus returns the value of the "marital_status" field in the mutation.
+func (m *IndividualMutation) MaritalStatus() (r int, exists bool) {
+	v := m.marital_status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaritalStatus returns the old "marital_status" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldMaritalStatus(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaritalStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaritalStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaritalStatus: %w", err)
+	}
+	return oldValue.MaritalStatus, nil
+}
+
+// AddMaritalStatus adds i to the "marital_status" field.
+func (m *IndividualMutation) AddMaritalStatus(i int) {
+	if m.addmarital_status != nil {
+		*m.addmarital_status += i
+	} else {
+		m.addmarital_status = &i
+	}
+}
+
+// AddedMaritalStatus returns the value that was added to the "marital_status" field in this mutation.
+func (m *IndividualMutation) AddedMaritalStatus() (r int, exists bool) {
+	v := m.addmarital_status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMaritalStatus resets all changes to the "marital_status" field.
+func (m *IndividualMutation) ResetMaritalStatus() {
+	m.marital_status = nil
+	m.addmarital_status = nil
+}
+
+// SetOccupation sets the "occupation" field.
+func (m *IndividualMutation) SetOccupation(i int) {
+	m.occupation = &i
+	m.addoccupation = nil
+}
+
+// Occupation returns the value of the "occupation" field in the mutation.
+func (m *IndividualMutation) Occupation() (r int, exists bool) {
+	v := m.occupation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOccupation returns the old "occupation" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldOccupation(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOccupation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOccupation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOccupation: %w", err)
+	}
+	return oldValue.Occupation, nil
+}
+
+// AddOccupation adds i to the "occupation" field.
+func (m *IndividualMutation) AddOccupation(i int) {
+	if m.addoccupation != nil {
+		*m.addoccupation += i
+	} else {
+		m.addoccupation = &i
+	}
+}
+
+// AddedOccupation returns the value that was added to the "occupation" field in this mutation.
+func (m *IndividualMutation) AddedOccupation() (r int, exists bool) {
+	v := m.addoccupation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetOccupation resets all changes to the "occupation" field.
+func (m *IndividualMutation) ResetOccupation() {
+	m.occupation = nil
+	m.addoccupation = nil
+}
+
+// SetRelationship sets the "relationship" field.
+func (m *IndividualMutation) SetRelationship(i int) {
+	m.relationship = &i
+	m.addrelationship = nil
+}
+
+// Relationship returns the value of the "relationship" field in the mutation.
+func (m *IndividualMutation) Relationship() (r int, exists bool) {
+	v := m.relationship
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRelationship returns the old "relationship" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldRelationship(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRelationship is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRelationship requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRelationship: %w", err)
+	}
+	return oldValue.Relationship, nil
+}
+
+// AddRelationship adds i to the "relationship" field.
+func (m *IndividualMutation) AddRelationship(i int) {
+	if m.addrelationship != nil {
+		*m.addrelationship += i
+	} else {
+		m.addrelationship = &i
+	}
+}
+
+// AddedRelationship returns the value that was added to the "relationship" field in this mutation.
+func (m *IndividualMutation) AddedRelationship() (r int, exists bool) {
+	v := m.addrelationship
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRelationship resets all changes to the "relationship" field.
+func (m *IndividualMutation) ResetRelationship() {
+	m.relationship = nil
+	m.addrelationship = nil
+}
+
+// SetRace sets the "race" field.
+func (m *IndividualMutation) SetRace(i int) {
+	m.race = &i
+	m.addrace = nil
+}
+
+// Race returns the value of the "race" field in the mutation.
+func (m *IndividualMutation) Race() (r int, exists bool) {
+	v := m.race
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRace returns the old "race" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldRace(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRace is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRace requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRace: %w", err)
+	}
+	return oldValue.Race, nil
+}
+
+// AddRace adds i to the "race" field.
+func (m *IndividualMutation) AddRace(i int) {
+	if m.addrace != nil {
+		*m.addrace += i
+	} else {
+		m.addrace = &i
+	}
+}
+
+// AddedRace returns the value that was added to the "race" field in this mutation.
+func (m *IndividualMutation) AddedRace() (r int, exists bool) {
+	v := m.addrace
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRace resets all changes to the "race" field.
+func (m *IndividualMutation) ResetRace() {
+	m.race = nil
+	m.addrace = nil
+}
+
+// SetSex sets the "sex" field.
+func (m *IndividualMutation) SetSex(i int) {
+	m.sex = &i
+	m.addsex = nil
+}
+
+// Sex returns the value of the "sex" field in the mutation.
+func (m *IndividualMutation) Sex() (r int, exists bool) {
+	v := m.sex
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSex returns the old "sex" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldSex(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSex is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSex requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSex: %w", err)
+	}
+	return oldValue.Sex, nil
+}
+
+// AddSex adds i to the "sex" field.
+func (m *IndividualMutation) AddSex(i int) {
+	if m.addsex != nil {
+		*m.addsex += i
+	} else {
+		m.addsex = &i
+	}
+}
+
+// AddedSex returns the value that was added to the "sex" field in this mutation.
+func (m *IndividualMutation) AddedSex() (r int, exists bool) {
+	v := m.addsex
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetSex resets all changes to the "sex" field.
+func (m *IndividualMutation) ResetSex() {
+	m.sex = nil
+	m.addsex = nil
+}
+
+// SetCapitalGain sets the "capital_gain" field.
+func (m *IndividualMutation) SetCapitalGain(f float64) {
+	m.capital_gain = &f
+	m.addcapital_gain = nil
+}
+
+// CapitalGain returns the value of the "capital_gain" field in the mutation.
+func (m *IndividualMutation) CapitalGain() (r float64, exists bool) {
+	v := m.capital_gain
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCapitalGain returns the old "capital_gain" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldCapitalGain(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCapitalGain is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCapitalGain requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCapitalGain: %w", err)
+	}
+	return oldValue.CapitalGain, nil
+}
+
+// AddCapitalGain adds f to the "capital_gain" field.
+func (m *IndividualMutation) AddCapitalGain(f float64) {
+	if m.addcapital_gain != nil {
+		*m.addcapital_gain += f
+	} else {
+		m.addcapital_gain = &f
+	}
+}
+
+// AddedCapitalGain returns the value that was added to the "capital_gain" field in this mutation.
+func (m *IndividualMutation) AddedCapitalGain() (r float64, exists bool) {
+	v := m.addcapital_gain
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCapitalGain resets all changes to the "capital_gain" field.
+func (m *IndividualMutation) ResetCapitalGain() {
+	m.capital_gain = nil
+	m.addcapital_gain = nil
+}
+
+// SetCapitalLoss sets the "capital_loss" field.
+func (m *IndividualMutation) SetCapitalLoss(f float64) {
+	m.capital_loss = &f
+	m.addcapital_loss = nil
+}
+
+// CapitalLoss returns the value of the "capital_loss" field in the mutation.
+func (m *IndividualMutation) CapitalLoss() (r float64, exists bool) {
+	v := m.capital_loss
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCapitalLoss returns the old "capital_loss" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldCapitalLoss(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCapitalLoss is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCapitalLoss requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCapitalLoss: %w", err)
+	}
+	return oldValue.CapitalLoss, nil
+}
+
+// AddCapitalLoss adds f to the "capital_loss" field.
+func (m *IndividualMutation) AddCapitalLoss(f float64) {
+	if m.addcapital_loss != nil {
+		*m.addcapital_loss += f
+	} else {
+		m.addcapital_loss = &f
+	}
+}
+
+// AddedCapitalLoss returns the value that was added to the "capital_loss" field in this mutation.
+func (m *IndividualMutation) AddedCapitalLoss() (r float64, exists bool) {
+	v := m.addcapital_loss
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCapitalLoss resets all changes to the "capital_loss" field.
+func (m *IndividualMutation) ResetCapitalLoss() {
+	m.capital_loss = nil
+	m.addcapital_loss = nil
+}
+
+// SetHoursPerWeek sets the "hours_per_week" field.
+func (m *IndividualMutation) SetHoursPerWeek(f float64) {
+	m.hours_per_week = &f
+	m.addhours_per_week = nil
+}
+
+// HoursPerWeek returns the value of the "hours_per_week" field in the mutation.
+func (m *IndividualMutation) HoursPerWeek() (r float64, exists bool) {
+	v := m.hours_per_week
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHoursPerWeek returns the old "hours_per_week" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldHoursPerWeek(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHoursPerWeek is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHoursPerWeek requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHoursPerWeek: %w", err)
+	}
+	return oldValue.HoursPerWeek, nil
+}
+
+// AddHoursPerWeek adds f to the "hours_per_week" field.
+func (m *IndividualMutation) AddHoursPerWeek(f float64) {
+	if m.addhours_per_week != nil {
+		*m.addhours_per_week += f
+	} else {
+		m.addhours_per_week = &f
+	}
+}
+
+// AddedHoursPerWeek returns the value that was added to the "hours_per_week" field in this mutation.
+func (m *IndividualMutation) AddedHoursPerWeek() (r float64, exists bool) {
+	v := m.addhours_per_week
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetHoursPerWeek resets all changes to the "hours_per_week" field.
+func (m *IndividualMutation) ResetHoursPerWeek() {
+	m.hours_per_week = nil
+	m.addhours_per_week = nil
+}
+
+// SetCountry sets the "country" field.
+func (m *IndividualMutation) SetCountry(i int) {
+	m.country = &i
+	m.addcountry = nil
+}
+
+// Country returns the value of the "country" field in the mutation.
+func (m *IndividualMutation) Country() (r int, exists bool) {
+	v := m.country
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCountry returns the old "country" field's value of the Individual entity.
+// If the Individual object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IndividualMutation) OldCountry(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCountry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCountry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCountry: %w", err)
+	}
+	return oldValue.Country, nil
+}
+
+// AddCountry adds i to the "country" field.
+func (m *IndividualMutation) AddCountry(i int) {
+	if m.addcountry != nil {
+		*m.addcountry += i
+	} else {
+		m.addcountry = &i
+	}
+}
+
+// AddedCountry returns the value that was added to the "country" field in this mutation.
+func (m *IndividualMutation) AddedCountry() (r int, exists bool) {
+	v := m.addcountry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCountry resets all changes to the "country" field.
+func (m *IndividualMutation) ResetCountry() {
+	m.country = nil
+	m.addcountry = nil
+}
+
+// SetBracketID sets the "bracket" edge to the IncomeBracket entity by id.
+func (m *IndividualMutation) SetBracketID(id int) {
+	m.bracket = &id
+}
+
+// ClearBracket clears the "bracket" edge to the IncomeBracket entity.
+func (m *IndividualMutation) ClearBracket() {
+	m.clearedbracket = true
+}
+
+// BracketCleared reports if the "bracket" edge to the IncomeBracket entity was cleared.
+func (m *IndividualMutation) BracketCleared() bool {
+	return m.clearedbracket
+}
+
+// BracketID returns the "bracket" edge ID in the mutation.
+func (m *IndividualMutation) BracketID() (id int, exists bool) {
+	if m.bracket != nil {
+		return *m.bracket, true
+	}
+	return
+}
+
+// BracketIDs returns the "bracket" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// BracketID instead. It exists only for internal usage by the builders.
+func (m *IndividualMutation) BracketIDs() (ids []int) {
+	if id := m.bracket; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetBracket resets all changes to the "bracket" edge.
+func (m *IndividualMutation) ResetBracket() {
+	m.bracket = nil
+	m.clearedbracket = false
 }
 
 // Where appends a list predicates to the IndividualMutation builder.
@@ -213,9 +1274,42 @@ func (m *IndividualMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IndividualMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 12)
 	if m.age != nil {
 		fields = append(fields, individual.FieldAge)
+	}
+	if m.workclass != nil {
+		fields = append(fields, individual.FieldWorkclass)
+	}
+	if m.education != nil {
+		fields = append(fields, individual.FieldEducation)
+	}
+	if m.marital_status != nil {
+		fields = append(fields, individual.FieldMaritalStatus)
+	}
+	if m.occupation != nil {
+		fields = append(fields, individual.FieldOccupation)
+	}
+	if m.relationship != nil {
+		fields = append(fields, individual.FieldRelationship)
+	}
+	if m.race != nil {
+		fields = append(fields, individual.FieldRace)
+	}
+	if m.sex != nil {
+		fields = append(fields, individual.FieldSex)
+	}
+	if m.capital_gain != nil {
+		fields = append(fields, individual.FieldCapitalGain)
+	}
+	if m.capital_loss != nil {
+		fields = append(fields, individual.FieldCapitalLoss)
+	}
+	if m.hours_per_week != nil {
+		fields = append(fields, individual.FieldHoursPerWeek)
+	}
+	if m.country != nil {
+		fields = append(fields, individual.FieldCountry)
 	}
 	return fields
 }
@@ -227,6 +1321,28 @@ func (m *IndividualMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case individual.FieldAge:
 		return m.Age()
+	case individual.FieldWorkclass:
+		return m.Workclass()
+	case individual.FieldEducation:
+		return m.Education()
+	case individual.FieldMaritalStatus:
+		return m.MaritalStatus()
+	case individual.FieldOccupation:
+		return m.Occupation()
+	case individual.FieldRelationship:
+		return m.Relationship()
+	case individual.FieldRace:
+		return m.Race()
+	case individual.FieldSex:
+		return m.Sex()
+	case individual.FieldCapitalGain:
+		return m.CapitalGain()
+	case individual.FieldCapitalLoss:
+		return m.CapitalLoss()
+	case individual.FieldHoursPerWeek:
+		return m.HoursPerWeek()
+	case individual.FieldCountry:
+		return m.Country()
 	}
 	return nil, false
 }
@@ -238,6 +1354,28 @@ func (m *IndividualMutation) OldField(ctx context.Context, name string) (ent.Val
 	switch name {
 	case individual.FieldAge:
 		return m.OldAge(ctx)
+	case individual.FieldWorkclass:
+		return m.OldWorkclass(ctx)
+	case individual.FieldEducation:
+		return m.OldEducation(ctx)
+	case individual.FieldMaritalStatus:
+		return m.OldMaritalStatus(ctx)
+	case individual.FieldOccupation:
+		return m.OldOccupation(ctx)
+	case individual.FieldRelationship:
+		return m.OldRelationship(ctx)
+	case individual.FieldRace:
+		return m.OldRace(ctx)
+	case individual.FieldSex:
+		return m.OldSex(ctx)
+	case individual.FieldCapitalGain:
+		return m.OldCapitalGain(ctx)
+	case individual.FieldCapitalLoss:
+		return m.OldCapitalLoss(ctx)
+	case individual.FieldHoursPerWeek:
+		return m.OldHoursPerWeek(ctx)
+	case individual.FieldCountry:
+		return m.OldCountry(ctx)
 	}
 	return nil, fmt.Errorf("unknown Individual field %s", name)
 }
@@ -248,11 +1386,88 @@ func (m *IndividualMutation) OldField(ctx context.Context, name string) (ent.Val
 func (m *IndividualMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case individual.FieldAge:
-		v, ok := value.(int)
+		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAge(v)
+		return nil
+	case individual.FieldWorkclass:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWorkclass(v)
+		return nil
+	case individual.FieldEducation:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEducation(v)
+		return nil
+	case individual.FieldMaritalStatus:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaritalStatus(v)
+		return nil
+	case individual.FieldOccupation:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOccupation(v)
+		return nil
+	case individual.FieldRelationship:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRelationship(v)
+		return nil
+	case individual.FieldRace:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRace(v)
+		return nil
+	case individual.FieldSex:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSex(v)
+		return nil
+	case individual.FieldCapitalGain:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCapitalGain(v)
+		return nil
+	case individual.FieldCapitalLoss:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCapitalLoss(v)
+		return nil
+	case individual.FieldHoursPerWeek:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHoursPerWeek(v)
+		return nil
+	case individual.FieldCountry:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCountry(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Individual field %s", name)
@@ -265,6 +1480,39 @@ func (m *IndividualMutation) AddedFields() []string {
 	if m.addage != nil {
 		fields = append(fields, individual.FieldAge)
 	}
+	if m.addworkclass != nil {
+		fields = append(fields, individual.FieldWorkclass)
+	}
+	if m.addeducation != nil {
+		fields = append(fields, individual.FieldEducation)
+	}
+	if m.addmarital_status != nil {
+		fields = append(fields, individual.FieldMaritalStatus)
+	}
+	if m.addoccupation != nil {
+		fields = append(fields, individual.FieldOccupation)
+	}
+	if m.addrelationship != nil {
+		fields = append(fields, individual.FieldRelationship)
+	}
+	if m.addrace != nil {
+		fields = append(fields, individual.FieldRace)
+	}
+	if m.addsex != nil {
+		fields = append(fields, individual.FieldSex)
+	}
+	if m.addcapital_gain != nil {
+		fields = append(fields, individual.FieldCapitalGain)
+	}
+	if m.addcapital_loss != nil {
+		fields = append(fields, individual.FieldCapitalLoss)
+	}
+	if m.addhours_per_week != nil {
+		fields = append(fields, individual.FieldHoursPerWeek)
+	}
+	if m.addcountry != nil {
+		fields = append(fields, individual.FieldCountry)
+	}
 	return fields
 }
 
@@ -275,6 +1523,28 @@ func (m *IndividualMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case individual.FieldAge:
 		return m.AddedAge()
+	case individual.FieldWorkclass:
+		return m.AddedWorkclass()
+	case individual.FieldEducation:
+		return m.AddedEducation()
+	case individual.FieldMaritalStatus:
+		return m.AddedMaritalStatus()
+	case individual.FieldOccupation:
+		return m.AddedOccupation()
+	case individual.FieldRelationship:
+		return m.AddedRelationship()
+	case individual.FieldRace:
+		return m.AddedRace()
+	case individual.FieldSex:
+		return m.AddedSex()
+	case individual.FieldCapitalGain:
+		return m.AddedCapitalGain()
+	case individual.FieldCapitalLoss:
+		return m.AddedCapitalLoss()
+	case individual.FieldHoursPerWeek:
+		return m.AddedHoursPerWeek()
+	case individual.FieldCountry:
+		return m.AddedCountry()
 	}
 	return nil, false
 }
@@ -285,11 +1555,88 @@ func (m *IndividualMutation) AddedField(name string) (ent.Value, bool) {
 func (m *IndividualMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case individual.FieldAge:
-		v, ok := value.(int)
+		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddAge(v)
+		return nil
+	case individual.FieldWorkclass:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddWorkclass(v)
+		return nil
+	case individual.FieldEducation:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddEducation(v)
+		return nil
+	case individual.FieldMaritalStatus:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMaritalStatus(v)
+		return nil
+	case individual.FieldOccupation:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOccupation(v)
+		return nil
+	case individual.FieldRelationship:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRelationship(v)
+		return nil
+	case individual.FieldRace:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRace(v)
+		return nil
+	case individual.FieldSex:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddSex(v)
+		return nil
+	case individual.FieldCapitalGain:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCapitalGain(v)
+		return nil
+	case individual.FieldCapitalLoss:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCapitalLoss(v)
+		return nil
+	case individual.FieldHoursPerWeek:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHoursPerWeek(v)
+		return nil
+	case individual.FieldCountry:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCountry(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Individual numeric field %s", name)
@@ -321,54 +1668,115 @@ func (m *IndividualMutation) ResetField(name string) error {
 	case individual.FieldAge:
 		m.ResetAge()
 		return nil
+	case individual.FieldWorkclass:
+		m.ResetWorkclass()
+		return nil
+	case individual.FieldEducation:
+		m.ResetEducation()
+		return nil
+	case individual.FieldMaritalStatus:
+		m.ResetMaritalStatus()
+		return nil
+	case individual.FieldOccupation:
+		m.ResetOccupation()
+		return nil
+	case individual.FieldRelationship:
+		m.ResetRelationship()
+		return nil
+	case individual.FieldRace:
+		m.ResetRace()
+		return nil
+	case individual.FieldSex:
+		m.ResetSex()
+		return nil
+	case individual.FieldCapitalGain:
+		m.ResetCapitalGain()
+		return nil
+	case individual.FieldCapitalLoss:
+		m.ResetCapitalLoss()
+		return nil
+	case individual.FieldHoursPerWeek:
+		m.ResetHoursPerWeek()
+		return nil
+	case individual.FieldCountry:
+		m.ResetCountry()
+		return nil
 	}
 	return fmt.Errorf("unknown Individual field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *IndividualMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.bracket != nil {
+		edges = append(edges, individual.EdgeBracket)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *IndividualMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case individual.EdgeBracket:
+		if id := m.bracket; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *IndividualMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *IndividualMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *IndividualMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedbracket {
+		edges = append(edges, individual.EdgeBracket)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *IndividualMutation) EdgeCleared(name string) bool {
+	switch name {
+	case individual.EdgeBracket:
+		return m.clearedbracket
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *IndividualMutation) ClearEdge(name string) error {
+	switch name {
+	case individual.EdgeBracket:
+		m.ClearBracket()
+		return nil
+	}
 	return fmt.Errorf("unknown Individual unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *IndividualMutation) ResetEdge(name string) error {
+	switch name {
+	case individual.EdgeBracket:
+		m.ResetBracket()
+		return nil
+	}
 	return fmt.Errorf("unknown Individual edge %s", name)
 }

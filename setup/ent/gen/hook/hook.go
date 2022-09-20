@@ -9,6 +9,19 @@ import (
 	"github.com/SachinVarghese/pgamber/setup/ent/gen"
 )
 
+// The IncomeBracketFunc type is an adapter to allow the use of ordinary
+// function as IncomeBracket mutator.
+type IncomeBracketFunc func(context.Context, *gen.IncomeBracketMutation) (gen.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f IncomeBracketFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
+	mv, ok := m.(*gen.IncomeBracketMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.IncomeBracketMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The IndividualFunc type is an adapter to allow the use of ordinary
 // function as Individual mutator.
 type IndividualFunc func(context.Context, *gen.IndividualMutation) (gen.Value, error)

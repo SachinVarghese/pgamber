@@ -8,10 +8,41 @@ import (
 )
 
 var (
+	// IncomeBracketsColumns holds the columns for the "income_brackets" table.
+	IncomeBracketsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "class", Type: field.TypeEnum, Enums: []string{"lte_50K", "gt_50K"}, Default: "lte_50K"},
+		{Name: "individual_bracket", Type: field.TypeInt, Unique: true, Nullable: true},
+	}
+	// IncomeBracketsTable holds the schema information for the "income_brackets" table.
+	IncomeBracketsTable = &schema.Table{
+		Name:       "income_brackets",
+		Columns:    IncomeBracketsColumns,
+		PrimaryKey: []*schema.Column{IncomeBracketsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "income_brackets_individuals_bracket",
+				Columns:    []*schema.Column{IncomeBracketsColumns[2]},
+				RefColumns: []*schema.Column{IndividualsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// IndividualsColumns holds the columns for the "individuals" table.
 	IndividualsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "age", Type: field.TypeInt},
+		{Name: "age", Type: field.TypeFloat64},
+		{Name: "workclass", Type: field.TypeInt},
+		{Name: "education", Type: field.TypeInt},
+		{Name: "marital_status", Type: field.TypeInt},
+		{Name: "occupation", Type: field.TypeInt},
+		{Name: "relationship", Type: field.TypeInt},
+		{Name: "race", Type: field.TypeInt},
+		{Name: "sex", Type: field.TypeInt},
+		{Name: "capital_gain", Type: field.TypeFloat64},
+		{Name: "capital_loss", Type: field.TypeFloat64},
+		{Name: "hours_per_week", Type: field.TypeFloat64},
+		{Name: "country", Type: field.TypeInt},
 	}
 	// IndividualsTable holds the schema information for the "individuals" table.
 	IndividualsTable = &schema.Table{
@@ -21,9 +52,11 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		IncomeBracketsTable,
 		IndividualsTable,
 	}
 )
 
 func init() {
+	IncomeBracketsTable.ForeignKeys[0].RefTable = IndividualsTable
 }

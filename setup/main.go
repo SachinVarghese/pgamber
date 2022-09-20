@@ -6,19 +6,26 @@ import (
 	"log"
 
 	ent_gen "github.com/SachinVarghese/pgamber/setup/ent/gen"
-	"github.com/SachinVarghese/pgamber/setup/ent/gen/individual"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
+	_ "github.com/lib/pq"
 )
 
-type Person struct {
-	age int
-}
+const (
+	user     = "postgres"
+	password = "postgres"
+	host     = "localhost"
+	port     = "5432"
+	dbName   = "pgamber"
+	sslMode  = "disable"
+)
 
 func main() {
 
-	client, err := ent_gen.Open("sqlite3", "file:pent?mode=memory&cache=shared&_fk=1")
+	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", host, port, user, password, dbName, sslMode)
+
+	client, err := ent_gen.Open("postgres", connectionString)
 	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
+		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
 	defer client.Close()
 	ctx := context.Background()
@@ -28,43 +35,79 @@ func main() {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	var person Person
-	person.age = 30
+	peopleData := fetchPeopleData(CSVDataFilepath, CSVTruthFilepath)
 
-	if _, err = CreateIndividual(ctx, client, &person); err != nil {
+	individuals, err := createIndividualsData(ctx, client, peopleData)
+	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("%d individuals added ", len(individuals))
 
-	if _, err = QueryIndividual(ctx, client); err != nil {
+	_, err = createIncomeBracketData(ctx, client, peopleData, individuals)
+	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("%d individual brackets added ", len(individuals))
+
+	count, err := queryIndividualsCount(ctx, client)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("%d individuals count total", count)
 }
 
-func CreateIndividual(ctx context.Context, client *ent_gen.Client, person *Person) (*ent_gen.Individual, error) {
+func createIndividualsData(ctx context.Context, client *ent_gen.Client, people []Person) (persons []*ent_gen.Individual, err error) {
+	bulk := make([]*ent_gen.IndividualCreate, len(people))
+	for i, person := range people {
 
-	u, err := client.Individual.
-		Create().
-		SetAge(person.age).
-		Save(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed creating user: %w", err)
+		bulk[i] = client.Individual.
+			Create().
+			SetAge(person.age).
+			SetWorkclass(int(person.workclass)).
+			SetEducation(int(person.education)).
+			SetMaritalStatus(int(person.maritalStatus)).
+			SetOccupation(int(person.occupation)).
+			SetRelationship(int(person.relationship)).
+			SetRace(int(person.race)).
+			SetSex(int(person.sex)).
+			SetCapitalGain(person.capitalGain).
+			SetCapitalLoss(person.capitalLoss).
+			SetHoursPerWeek(person.hoursPerWeek).
+			SetCountry(int(person.country))
 	}
 
-	log.Println("user was created: ", u)
-	return u, nil
+	persons, err = client.Individual.CreateBulk(bulk...).Save(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed bulk appending individuals: %w", err)
+	}
+
+	return persons, nil
 }
 
-func QueryIndividual(ctx context.Context, client *ent_gen.Client) (*ent_gen.Individual, error) {
-	u, err := client.Individual.
-		Query().
-		Where(individual.AgeGT(20)).
-		// `Only` fails if no user found,
-		// or more than 1 user returned.
-		Only(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed querying user: %w", err)
+func createIncomeBracketData(ctx context.Context, client *ent_gen.Client, people []Person, persons []*ent_gen.Individual) (brackets []*ent_gen.IncomeBracket, err error) {
+	bulk := make([]*ent_gen.IncomeBracketCreate, len(people))
+	for i, person := range people {
+		if person.class {
+			bulk[i] = client.IncomeBracket.Create().SetClass(incomebracket.ClassGt50K).SetPersonID(persons[i].ID)
+		} else {
+			bulk[i] = client.IncomeBracket.Create().SetClass(incomebracket.ClassLte50K).SetPersonID(persons[i].ID)
+		}
 	}
 
-	log.Println("user returned: ", u)
-	return u, nil
+	brackets, err = client.IncomeBracket.CreateBulk(bulk...).Save(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed bulk appending individual income brackets: %w", err)
+	}
+
+	return brackets, nil
+}
+
+func queryIndividualsCount(ctx context.Context, client *ent_gen.Client) (int, error) {
+	count, err := client.Individual.
+		Query().Count(ctx)
+	if err != nil {
+		return 0, fmt.Errorf("failed querying individuals: %w", err)
+	}
+
+	return count, nil
 }
