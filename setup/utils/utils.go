@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"encoding/csv"
@@ -11,28 +11,28 @@ import (
 const (
 	CSVDataFilepath  = "./data/array.csv"
 	CSVTruthFilepath = "./data/truth.csv"
-	CSVREcordSize    = 1000
+	CSVREcordSize    = 1
 )
 
 type Person struct {
-	age           float64
-	workclass     int64
-	education     int64
-	maritalStatus int64
-	occupation    int64
-	relationship  int64
-	race          int64
-	sex           int64
-	capitalGain   float64
-	capitalLoss   float64
-	hoursPerWeek  float64
-	country       int64
-	class         bool
+	Age           float64
+	Workclass     int64
+	Education     int64
+	MaritalStatus int64
+	Occupation    int64
+	Relationship  int64
+	Race          int64
+	Sex           int64
+	CapitalGain   float64
+	CapitalLoss   float64
+	HoursPerWeek  float64
+	Country       int64
+	Class         bool
 }
 
-func fetchPeopleData(dataPath string, truthPath string) (people []Person) {
-	records := readCsvFile(dataPath)
-	classes := readCsvFile(truthPath)
+func FetchPeopleData() (people []Person) {
+	records := readCsvFile(CSVDataFilepath)
+	classes := readCsvFile(CSVTruthFilepath)
 
 	records = records[0:CSVREcordSize]
 	classes = classes[0:CSVREcordSize]
@@ -55,79 +55,79 @@ func fetchPeopleData(dataPath string, truthPath string) (people []Person) {
 		if err != nil {
 			break
 		}
-		person.age = age
+		person.Age = age
 
 		workclass, err := strconv.ParseInt(values[1], 10, 64)
 		if err != nil {
 			break
 		}
-		person.workclass = workclass
+		person.Workclass = workclass
 
 		education, err := strconv.ParseInt(values[2], 10, 64)
 		if err != nil {
 			break
 		}
-		person.education = education
+		person.Education = education
 
 		maritalStatus, err := strconv.ParseInt(values[3], 10, 64)
 		if err != nil {
 			break
 		}
-		person.maritalStatus = maritalStatus
+		person.MaritalStatus = maritalStatus
 
 		occupation, err := strconv.ParseInt(values[4], 10, 64)
 		if err != nil {
 			break
 		}
-		person.occupation = occupation
+		person.Occupation = occupation
 
 		relationship, err := strconv.ParseInt(values[5], 10, 64)
 		if err != nil {
 			break
 		}
-		person.relationship = relationship
+		person.Relationship = relationship
 
 		race, err := strconv.ParseInt(values[6], 10, 64)
 		if err != nil {
 			break
 		}
-		person.race = race
+		person.Race = race
 
 		sex, err := strconv.ParseInt(values[7], 10, 64)
 		if err != nil {
 			break
 		}
-		person.sex = sex
+		person.Sex = sex
 
 		capitalGain, err := strconv.ParseFloat(values[8], 64)
 		if err != nil {
 			break
 		}
-		person.capitalGain = capitalGain
+		person.CapitalGain = capitalGain
 
 		capitalLoss, err := strconv.ParseFloat(values[9], 64)
 		if err != nil {
 			break
 		}
-		person.capitalLoss = capitalLoss
+		person.CapitalLoss = capitalLoss
 
 		hoursPerWeek, err := strconv.ParseFloat(values[10], 64)
 		if err != nil {
 			break
 		}
-		person.hoursPerWeek = hoursPerWeek
+		person.HoursPerWeek = hoursPerWeek
 
 		country, err := strconv.ParseInt(values[11], 10, 64)
 		if err != nil {
 			break
 		}
-		person.country = country
+		person.Country = country
 
 		class := classNum > 0
 		if err != nil {
 			break
 		}
-		person.class = class
+		person.Class = class
 
 		people = append(people, person)
 	}

@@ -7,6 +7,7 @@ import (
 
 	ent_gen "github.com/SachinVarghese/pgamber/setup/ent/gen"
 	"github.com/SachinVarghese/pgamber/setup/ent/gen/incomebracket"
+	"github.com/SachinVarghese/pgamber/setup/utils"
 	_ "github.com/lib/pq"
 )
 
@@ -35,7 +36,7 @@ func main() {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	peopleData := fetchPeopleData(CSVDataFilepath, CSVTruthFilepath)
+	peopleData := utils.FetchPeopleData()
 
 	individuals, err := createIndividualsData(ctx, client, peopleData)
 	if err != nil {
@@ -56,24 +57,24 @@ func main() {
 	log.Printf("%d individuals count total", count)
 }
 
-func createIndividualsData(ctx context.Context, client *ent_gen.Client, people []Person) (persons []*ent_gen.Individual, err error) {
+func createIndividualsData(ctx context.Context, client *ent_gen.Client, people []utils.Person) (persons []*ent_gen.Individual, err error) {
 	bulk := make([]*ent_gen.IndividualCreate, len(people))
 	for i, person := range people {
 
 		bulk[i] = client.Individual.
 			Create().
-			SetAge(person.age).
-			SetWorkclass(int(person.workclass)).
-			SetEducation(int(person.education)).
-			SetMaritalStatus(int(person.maritalStatus)).
-			SetOccupation(int(person.occupation)).
-			SetRelationship(int(person.relationship)).
-			SetRace(int(person.race)).
-			SetSex(int(person.sex)).
-			SetCapitalGain(person.capitalGain).
-			SetCapitalLoss(person.capitalLoss).
-			SetHoursPerWeek(person.hoursPerWeek).
-			SetCountry(int(person.country))
+			SetAge(person.Age).
+			SetWorkclass(int(person.Workclass)).
+			SetEducation(int(person.Education)).
+			SetMaritalStatus(int(person.MaritalStatus)).
+			SetOccupation(int(person.Occupation)).
+			SetRelationship(int(person.Relationship)).
+			SetRace(int(person.Race)).
+			SetSex(int(person.Sex)).
+			SetCapitalGain(person.CapitalGain).
+			SetCapitalLoss(person.CapitalLoss).
+			SetHoursPerWeek(person.HoursPerWeek).
+			SetCountry(int(person.Country))
 	}
 
 	persons, err = client.Individual.CreateBulk(bulk...).Save(ctx)
@@ -84,10 +85,10 @@ func createIndividualsData(ctx context.Context, client *ent_gen.Client, people [
 	return persons, nil
 }
 
-func createIncomeBracketData(ctx context.Context, client *ent_gen.Client, people []Person, persons []*ent_gen.Individual) (brackets []*ent_gen.IncomeBracket, err error) {
+func createIncomeBracketData(ctx context.Context, client *ent_gen.Client, people []utils.Person, persons []*ent_gen.Individual) (brackets []*ent_gen.IncomeBracket, err error) {
 	bulk := make([]*ent_gen.IncomeBracketCreate, len(people))
 	for i, person := range people {
-		if person.class {
+		if person.Class {
 			bulk[i] = client.IncomeBracket.Create().SetClass(incomebracket.ClassGt50K).SetPersonID(persons[i].ID)
 		} else {
 			bulk[i] = client.IncomeBracket.Create().SetClass(incomebracket.ClassLte50K).SetPersonID(persons[i].ID)
