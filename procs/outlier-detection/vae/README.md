@@ -1,6 +1,8 @@
 # VAE Outlier Detection
 
-### Quickstart
+The Variational Auto-Encoder (VAE) outlier detector is first trained on a batch of numerical columns specified on a reference data table. The inbuilt encoder reduces the record to a latent dimension and VAE detector tries to reconstruct the input it receives. If the input data cannot be reconstructed well, the reconstruction error is high and the data can be flagged as an outlier. The reconstruction error is measured as the mean squared error (MSE) between the input and the reconstructed instance. Read more on the `alibi-detect` [documentation](https://docs.seldon.io/projects/alibi-detect/en/stable/od/methods/vae.html#Variational-Auto-Encoder).
+
+## Quickstart
 
 1. Spin up test setup using `docker-compose` :hammer_and_wrench:
 
@@ -20,14 +22,14 @@ make -C ../../../ ingest_test_data
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber < create.sql
 ```
 
-4. Train a VAE outlier detector for the data in `individuals` table by providing exclude idex list for non numeric rows & ids. Further, provide anoher parameter for outlier percentage. :crystal_ball:
+4. Train a VAE outlier detector for the data in `individuals` table by providing exclude idex list for non numeric rows & ids. Further, provide anoher parameter for outlier percentage in the dataset and the latent dimension for the encoder. :crystal_ball:
 
 ```bash
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber
 ```
 
 ```sql
-SELECT trainVAEOutlierDetector('individuals', ARRAY[0,5], 10);
+SELECT trainVAEOutlierDetector('individuals', ARRAY[0,5], 10,2);
 ```
 
 5. Run outlier detection queries using sql commands :smile:

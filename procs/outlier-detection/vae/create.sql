@@ -1,5 +1,5 @@
 CREATE EXTENSION plpython3u;
-CREATE FUNCTION trainVAEOutlierDetector(table_name text, excluded_features int[], outlier_perc int) RETURNS TEXT AS $$
+CREATE FUNCTION trainVAEOutlierDetector(table_name text, excluded_features int[], outlier_perc int, latent_dim int) RETURNS TEXT AS $$
 
 import numpy as np
 import tensorflow as tf
@@ -26,7 +26,6 @@ mu, sigma = X_ref.mean(axis=0), X_ref.std(axis=0)
 X_ref = (X_ref - mu) / sigma
 
 n_features = X_ref.shape[1]
-latent_dim = 2
 
 encoder_net = tf.keras.Sequential(
   [
@@ -47,7 +46,7 @@ decoder_net = tf.keras.Sequential(
 
 od = OutlierVAE(threshold=None, score_type='mse', encoder_net=encoder_net,  decoder_net=decoder_net, latent_dim=latent_dim, samples=5)
 od.fit(X_ref,loss_fn=tf.keras.losses.mse,epochs=5,verbose=False)
-od.infer_threshold(X_ref, threshold_perc=100-outlier_perc, outlier_perc=100)
+od.infer_threshold(X_ref, threshold_perc=100-outlier_perc)
 
 filepath = '/var/lib/postgresql/data/detectors/outlier/vae/'+table_name
 save_detector(od, filepath)
