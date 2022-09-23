@@ -29,7 +29,7 @@ PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber
 ```
 
 ```sql
-SELECT trainVAEOutlierDetector('individuals', ARRAY[0,5], 10,2);
+SELECT createVAEOutlierDetector('individuals', ARRAY[0,5], 10.5, 2);
 ```
 
 5. Run outlier detection queries using sql commands :smile:

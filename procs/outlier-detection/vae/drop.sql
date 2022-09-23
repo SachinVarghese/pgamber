@@ -1,3 +1,3 @@
 DROP FUNCTION dropVAEOutlierDetector;
-DROP FUNCTION trainVAEOutlierDetector;
+DROP FUNCTION createVAEOutlierDetector;
 DROP EXTENSION plpython3u;

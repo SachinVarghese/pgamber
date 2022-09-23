@@ -1,5 +1,5 @@
 CREATE EXTENSION plpython3u;
-CREATE FUNCTION trainVAEOutlierDetector(table_name text, excluded_features int[], outlier_perc int, latent_dim int) RETURNS TEXT AS $$
+CREATE FUNCTION createVAEOutlierDetector(table_name text, excluded_features int[], outlier_perc float, latent_dim int) RETURNS TEXT AS $$
 
 import numpy as np
 import tensorflow as tf
