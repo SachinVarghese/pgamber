@@ -1,4 +1,4 @@
-CREATE FUNCTION trainVAEDetector(table_name text, outlier_perc int) RETURNS TEXT AS $$
+CREATE FUNCTION trainVAEDetector(table_name text, excluded_features int[], outlier_perc int) RETURNS TEXT AS $$
 
 import numpy as np
 import tensorflow as tf
@@ -18,6 +18,8 @@ X_ref = np.zeros((rowNum, len(features)))
 for i in range(rowNum):
   for j in range(len(features)):
     X_ref[i][j] = rv[i][features[j]]
+
+X_ref = np.delete(X_ref,excluded_features,1)    
 
 mu, sigma = X_ref.mean(axis=0), X_ref.std(axis=0)
 X_ref = (X_ref - mu) / sigma
@@ -54,6 +56,6 @@ return filepath;
 
 $$ LANGUAGE plpython3u;
 
-SELECT * FROM trainVAEDetector('individuals',10);
+SELECT * FROM trainVAEDetector('individuals', ARRAY[0], 10);
 
 DROP FUNCTION trainVAEDetector;
