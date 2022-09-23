@@ -9,3 +9,5 @@ This project hosts a set of stored functions for data observability on the Postg
 ### Outlier Detection
 
 - VAE Outlier Detection - [Quickstart](./procs/outlier-detection/vae/README.md)
+
+![pgAmber](./Diagrams.png)
