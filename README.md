@@ -1,6 +1,6 @@
 # pgAmber
 
-## Data Obsevability for PostgreSQL using Alibi-Detect
+## Data Observability for PostgreSQL using Alibi-Detect
 
 Monitoring the data quality on databases can be crucial for many real-world applications. The number of downstream applications being built using data extracted from SQL-based data warehouses and ML feature stores is unprecedented. A good set of observability tools at the data extraction layer could have a significant positive impact on optimizing such data pipelines and processes.
 
@@ -8,4 +8,4 @@ This project hosts a set of stored functions for data observability on the Postg
 
 ### Outlier Detection
 
-- VAE Outlier Detection on numerical data - [Quickstart](./procs/outlier-detection/vae/README.md)
+- VAE Outlier Detection - [Quickstart](./procs/outlier-detection/vae/README.md)

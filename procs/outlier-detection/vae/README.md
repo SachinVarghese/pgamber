@@ -1,28 +1,33 @@
 # VAE Outlier Detection
 
-The Variational Auto-Encoder (VAE) outlier detector is first trained on a batch of numerical columns specified on a reference data table. The inbuilt encoder reduces the record to a latent dimension and VAE detector tries to reconstruct the input it receives. If the input data cannot be reconstructed well, the reconstruction error is high and the data can be flagged as an outlier. The reconstruction error is measured as the mean squared error (MSE) between the input and the reconstructed instance. Read more on the `alibi-detect` [documentation](https://docs.seldon.io/projects/alibi-detect/en/stable/od/methods/vae.html#Variational-Auto-Encoder).
+The Variational Auto-Encoder (VAE) outlier detector is trained on a batch of **numerical columns** specified on a reference data table. The inbuilt encoder reduces the record to a specified latent dimension and from there VAE detector tries to reconstruct the input it receives. If the input data cannot be reconstructed well, the reconstruction error is high and the data can be flagged as an outlier. The reconstruction error is measured as the mean squared error (MSE) between the input and the reconstructed instance. Read more about this technique on the [`alibi-detect` documentation](https://docs.seldon.io/projects/alibi-detect/en/stable/od/methods/vae.html#Variational-Auto-Encoder).
 
 ## Quickstart
 
-1. Spin up test setup using `docker-compose` :hammer_and_wrench:
+1. Spin up test setup using `docker-compose`. This step creates a docker container running a postgres instance with some additional dependencies.:hammer_and_wrench:
 
 ```bash
 make -C ../../../ test_setup_up
 ```
 
-2. Ingest test data with golang script :card_index_dividers:
+2. Ingest test dataset with person’s characteristics as `individuals` table using the following script.:card_index_dividers:
 
 ```bash
 make -C ../../../ ingest_test_data
 ```
 
-3. Setup VAE outlier detector procs :magic_wand:
+3. Setup VAE outlier detector stored procedures. This is the secret sauce.:magic_wand:
 
 ```bash
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber < create.sql
 ```
 
-4. Train a VAE outlier detector for the data in `individuals` table by providing exclude idex list for non numeric rows & ids. Further, provide anoher parameter for outlier percentage in the dataset and the latent dimension for the encoder. :crystal_ball:
+4. Train a VAE outlier detector for the data table by providing the following,
+
+- name of the table to be used as reference data -> `individuals`
+- an exclude index list for non numeric rows & ids -> `ARRAY[0 , 5]`
+- outlier percentage in the dataset -> `10.5%`
+- the latent dimension for the encoder.-> `2`
 
 ```bash
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber
@@ -32,7 +37,7 @@ PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber
 SELECT createVAEOutlierDetector('individuals', ARRAY[0,5], 10.5, 2);
 ```
 
-5. Run outlier detection queries using sql commands :smile:
+5. This step creates an `isVAEOutlier` procedure to detect outlier records. :crystal_ball: Now, run outlier detection queries using sql commands :smile:
 
 ```sql
 SELECT *, isVAEOutlier(individuals) as outlier FROM individuals LIMIT 10;
@@ -53,7 +58,7 @@ SELECT *, isVAEOutlier(individuals) as outlier FROM individuals LIMIT 10;
 
 (10 rows)
 
-6. Outlier detection queries works with filters too :wink:
+6. Outlier detection queries works with your awesome filters too. :wink:
 
 ```sql
 SELECT *, isVAEOutlier(individuals) as outlier FROM individuals WHERE age > 55 LIMIT 10;
@@ -81,25 +86,25 @@ SELECT *, isVAEOutlier(individuals) as outlier FROM individuals WHERE isVAEOutli
 
 (1 row)
 
-7. Remove VAE outlier detector created for specific table, :file_cabinet:
+7. Remove VAE outlier detector created for specific table when you want to re-train or remove the detector artifacts. :file_cabinet:
 
 ```sql
 SELECT dropVAEOutlierDetector('individuals');
 ```
 
-8. Drop VAE outlier detector procs :axe:
+8. Drop VAE outlier detector procs to cleanup. :axe:
 
 ```bash
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber < drop.sql
 ```
 
-9. Spin down test setup :gear:
+9. Spin down test setup using `docker-compose`. :gear:
 
 ```bash
 make -C ../../../ test_setup_down
 ```
 
-10. Delete persisted data by removing local `docker` volume :broom:
+10. Delete persisted data by removing local `docker` volume. :broom:
 
 ```bash
 make -C ../../../ purge_test_volume
