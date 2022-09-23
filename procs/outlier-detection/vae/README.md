@@ -23,11 +23,10 @@ PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber < create.sq
 ```
 
 - :crystal_ball: Train a VAE outlier detector for the data table by providing the following,
-
-- name of the table to be used as reference data -> `individuals`
-- an exclude index list for non numeric rows & ids -> `ARRAY[0 , 5]`
-- outlier percentage in the dataset -> `10.5%`
-- the latent dimension for the encoder.-> `2`
+  - name of the table to be used as reference data -> `individuals`
+  - an exclude index list for non numeric rows & ids -> `ARRAY[0 , 5]`
+  - outlier percentage in the dataset -> `10.5%`
+  - the latent dimension for the encoder.-> `2`
 
 ```bash
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber
