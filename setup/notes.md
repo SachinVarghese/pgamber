@@ -6,7 +6,7 @@ go run -mod=mod entgo.io/ent/cmd/ent generate ./schema --target ./gen
 
 go generate ./ent
 
-docker build -t sachinmv31/postgres-py:latest .
+docker build -t sachinmv31/postgres-pgamber:latest .
 
 docker-compose up -d
 

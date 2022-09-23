@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   database:
-    image: sachinmv31/postgres-py:latest
+    image: sachinmv31/postgres-pgamber:latest
     restart: always
     ports:
       - "5432:5432"
