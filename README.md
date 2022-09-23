@@ -1,4 +1,4 @@
-# pgAmber
+# pgamber :crystal_ball:
 
 ## Data Observability for PostgreSQL using Alibi-Detect
 
