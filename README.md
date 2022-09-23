@@ -1,4 +1,4 @@
-# pgamber :crystal_ball:
+# pgAmber :orange_circle:
 
 ## Data Observability for PostgreSQL using Alibi-Detect
 
@@ -18,5 +18,5 @@ This project hosts a set of stored functions for data observability on the Postg
 
 ### Relevant Links
 
-- [Postgres](https://www.postgresql.org/)
+- [PostgreSQL](https://www.postgresql.org/)
 - [Alibi-Detect](https://docs.seldon.io/projects/alibi-detect)
