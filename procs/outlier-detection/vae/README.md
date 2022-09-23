@@ -4,25 +4,25 @@ The Variational Auto-Encoder (VAE) outlier detector is trained on a batch of **n
 
 ## Quickstart :racing_car:
 
-1. :hammer_and_wrench: Spin up test setup using `docker-compose`. This step creates a docker container running a postgres instance with some additional dependencies.
+- :hammer_and_wrench: Spin up test setup using `docker-compose`. This step creates a docker container running a postgres instance with some additional dependencies.
 
 ```bash
 make -C ../../../ test_setup_up
 ```
 
-2. :card_index_dividers: Ingest test dataset with person’s characteristics as `individuals` table using the following script.
+- :card_index_dividers: Ingest test dataset with person’s characteristics as `individuals` table using the following script.
 
 ```bash
 make -C ../../../ ingest_test_data
 ```
 
-3. :magic_wand: Setup VAE outlier detector stored procedures. This is the secret sauce.
+- :magic_wand: Setup VAE outlier detector stored procedures. This is the secret sauce.
 
 ```bash
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber < create.sql
 ```
 
-4. :crystal_ball: Train a VAE outlier detector for the data table by providing the following,
+- :crystal_ball: Train a VAE outlier detector for the data table by providing the following,
 
 - name of the table to be used as reference data -> `individuals`
 - an exclude index list for non numeric rows & ids -> `ARRAY[0 , 5]`
@@ -37,7 +37,7 @@ PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber
 SELECT createVAEOutlierDetector('individuals', ARRAY[0,5], 10.5, 2);
 ```
 
-5. :detective: This step creates an `isVAEOutlier` procedure to detect outlier records. Now, run outlier detection queries using sql commands :smile:
+- :detective: This step creates an `isVAEOutlier` procedure to detect outlier records. Now, run outlier detection queries using sql commands :smile:
 
 ```sql
 SELECT *, isVAEOutlier(individuals) as outlier FROM individuals LIMIT 10;
@@ -58,7 +58,7 @@ SELECT *, isVAEOutlier(individuals) as outlier FROM individuals LIMIT 10;
 
 (10 rows)
 
-6. :bar_chart: Outlier detection queries works with your awesome filters too. :wink:
+- :bar_chart: Outlier detection queries works with your awesome filters too. :wink:
 
 ```sql
 SELECT *, isVAEOutlier(individuals) as outlier FROM individuals WHERE age > 55 LIMIT 10;
@@ -86,25 +86,25 @@ SELECT *, isVAEOutlier(individuals) as outlier FROM individuals WHERE isVAEOutli
 
 (1 row)
 
-7. :file_cabinet: The VAE outlier detectors are created for specific table, when you want to re-train or remove the detector artifacts run,
+- :file_cabinet: The VAE outlier detectors are created for specific table, when you want to re-train or remove the detector artifacts run,
 
 ```sql
 SELECT dropVAEOutlierDetector('individuals');
 ```
 
-8. :axe: Drop VAE outlier detector procs to cleanup.
+- :axe: Drop VAE outlier detector procs to cleanup.
 
 ```bash
 PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d pgamber < drop.sql
 ```
 
-9. :gear: Spin down test setup using `docker-compose`.
+- :gear: Spin down test setup using `docker-compose`.
 
 ```bash
 make -C ../../../ test_setup_down
 ```
 
-10. :broom: Delete persisted data by removing local `docker` volume.
+- :broom: Delete persisted data by removing local `docker` volume.
 
 ```bash
 make -C ../../../ purge_test_volume
