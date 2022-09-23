@@ -6,7 +6,7 @@ Monitoring the data quality can be crucial for many real-world forcasting applic
 
 [Alibi Detect](https://docs.seldon.io/projects/alibi-detect/en/stable/index.html) is an open source Python library focused on outlier, adversarial and drift detection. Such machine learning based detection functions when paired with clever SQL queries can help users foresee any downstream data quality related issues.
 
-This repository plans to hosts a set of stored functions for data observability on the [PostgreSQL](https://www.postgresql.org/) database. These procedures are written in [python procedural language](https://www.postgresql.org/docs/current/plpython.html) to observe data abnormalities using alibi-detect python package.
+This repository plans to hosts a set of stored functions for data observability on the [PostgreSQL](https://www.postgresql.org/) database. These procedures are written in [python procedural language](https://www.postgresql.org/docs/current/plpython.html) to observe data abnormalities using alibi-detect python package. The current version is limited to detecting outlier records in numerical data tables.
 
 ### Outlier Detection
 
@@ -14,6 +14,6 @@ This repository plans to hosts a set of stored functions for data observability 
 
 ![pgAmber](./Diagrams.png)
 
-### Aside
+#### Aside
 
-The project name **pgAmber**, pronounced as 'paigamber' is a synonym for clairvoyant (or prophet) in conjunction with the aim of enabling the users to foresee data quality related issues. The current version is limited to detecting outlier records in numerical data tables.
+The project name **pgAmber**, pronounced as 'paigamber' is a synonym for clairvoyant (or prophet) in conjunction with the aim of enabling the users to foresee data quality related issues.
