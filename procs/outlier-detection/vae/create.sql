@@ -105,5 +105,5 @@ shutil.rmtree(filepath)
 
 plan = plpy.prepare("DROP FUNCTION isVAEOutlier("+table_name+");", [])
 rv = plpy.execute(plan, [])
-
+return "removed vae outlier detector for table: "+ table_name
 $$ LANGUAGE plpython3u;
