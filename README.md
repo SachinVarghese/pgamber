@@ -1,4 +1,4 @@
-# pgAmber :orange_circle:
+# pgAmber :large_orange_diamond:
 
 ## Data Observability for PostgreSQL using Alibi-Detect
 
